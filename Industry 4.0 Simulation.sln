@@ -3,9 +3,33 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D5B365C0-3771-4FBA-A123-6C6DF50AB70D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoTPlatform", "IoTPlatform\IoTPlatform.csproj", "{6746FE5B-851E-45B1-833E-335DB15AD074}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceSimulation", "DeviceSimulation\DeviceSimulation.csproj", "{E043CBD9-1BCF-470A-9D80-AD2473DC56C2}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6746FE5B-851E-45B1-833E-335DB15AD074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6746FE5B-851E-45B1-833E-335DB15AD074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6746FE5B-851E-45B1-833E-335DB15AD074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6746FE5B-851E-45B1-833E-335DB15AD074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E043CBD9-1BCF-470A-9D80-AD2473DC56C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E043CBD9-1BCF-470A-9D80-AD2473DC56C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E043CBD9-1BCF-470A-9D80-AD2473DC56C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E043CBD9-1BCF-470A-9D80-AD2473DC56C2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6746FE5B-851E-45B1-833E-335DB15AD074} = {D5B365C0-3771-4FBA-A123-6C6DF50AB70D}
+		{E043CBD9-1BCF-470A-9D80-AD2473DC56C2} = {D5B365C0-3771-4FBA-A123-6C6DF50AB70D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D97DC3D-D358-4DA6-8D64-35DEC2F625E8}
