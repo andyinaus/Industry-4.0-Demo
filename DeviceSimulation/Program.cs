@@ -8,6 +8,7 @@ using DeviceSimulation.Clients;
 using DeviceSimulation.Clients.Options;
 using DeviceSimulation.Simulators;
 using DeviceSimulation.Simulators.Options;
+using DeviceSimulation.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -54,6 +55,8 @@ namespace DeviceSimulation
             InitializeSerilog();
 
             services.AddSingleton<IoTHttpClient>();
+            services.AddSingleton<IClock>(new Clock(DateTime.Now));
+            services.AddTransient<ConveyorSimulator>();
         }
 
         public static void Main(string[] args)
