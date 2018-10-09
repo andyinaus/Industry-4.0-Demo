@@ -12,23 +12,21 @@ namespace DeviceSimulation.Clients
 {
     public class IoTHttpClient : IDisposable
     {
+        private readonly IoTPlatformOptions _ioTOptions;
+        private readonly HttpClientOptions _httpOptions;
         private readonly ILogger _logger;
         private readonly HttpClient _client;
 
         public IoTHttpClient(IOptions<IoTPlatformOptions> ioTOptions, IOptions<HttpClientOptions> httpOptions, ILogger<IoTHttpClient> logger, HttpClient client)
         {
-            HttpOptions = httpOptions?.Value ?? throw new ArgumentNullException(nameof(httpOptions));
-            IoTOptions = ioTOptions?.Value ?? throw new ArgumentNullException(nameof(ioTOptions));
+            _httpOptions = httpOptions?.Value ?? throw new ArgumentNullException(nameof(httpOptions));
+            _ioTOptions = ioTOptions?.Value ?? throw new ArgumentNullException(nameof(ioTOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _client = client ?? throw new ArgumentNullException(nameof(client));
 
-            _client.BaseAddress = new Uri(IoTOptions.BaseAddress);
+            _client.BaseAddress = new Uri(_ioTOptions.BaseAddress);
         }
         
-        public HttpClientOptions HttpOptions { get; private set; }
-
-        public IoTPlatformOptions IoTOptions { get; private set; }
-
         public async Task<HttpResponseMessage> SendSimulatedDeviceDataAsync(ConveyorSimulator simulator)
         {
             if (simulator == null) throw new ArgumentNullException(nameof(simulator));
@@ -38,11 +36,11 @@ namespace DeviceSimulation.Clients
             var content = new StringContent(JsonConvert.SerializeObject(simulator), Encoding.UTF8,
                 "application/json");
 
-            for (var i = 1; i <= HttpOptions.NumberOfRetries; i++)
+            for (var i = 0; i <= _httpOptions.NumberOfRetries; i++)
             {
                 try
                 {
-                    response = await _client.PutAsync(IoTOptions.RelativeSendingDataUrl, content);
+                    response = await _client.PutAsync(_ioTOptions.RelativeSendingDataUrl, content);
 
                     response.EnsureSuccessStatusCode();
                     Console.WriteLine($"Successfully sent for device {simulator.SerialNumber} with speed {simulator.Speed}.");
@@ -50,13 +48,13 @@ namespace DeviceSimulation.Clients
                 }
                 catch (HttpRequestException exception)
                 {
-                    if (i == HttpOptions.NumberOfRetries)
+                    if (i == _httpOptions.NumberOfRetries)
                     {
                         _logger.LogWarning($"Error at Device {simulator.SerialNumber}: {exception.Message}");
                     }
                     else
                     {
-                        Console.WriteLine($"{HttpOptions.NumberOfRetries - i} Attempts remaining ...");
+                        Console.WriteLine($"{_httpOptions.NumberOfRetries - i} Attempts remaining ...");
                     }
                 }
             }
