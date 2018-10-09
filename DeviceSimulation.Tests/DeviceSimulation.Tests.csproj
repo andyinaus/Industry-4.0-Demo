@@ -17,4 +17,8 @@
     <Folder Include="Simulators\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DeviceSimulation\DeviceSimulation.csproj" />
+  </ItemGroup>
+
 </Project>
