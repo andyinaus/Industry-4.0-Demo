@@ -75,8 +75,12 @@ namespace DeviceSimulation
             var client = serviceProvider.GetService<IoTHttpClient>();
             var timer = new Timer(1000);
 
-            var currentDateTime = DateTime.Now;
-            var simulatedConveyors = new[] { new ConveyorSimulator(currentDateTime), new ConveyorSimulator(currentDateTime), new ConveyorSimulator(currentDateTime) };
+            var simulatedConveyors = new[]
+            {
+                serviceProvider.GetService<ConveyorSimulator>(),
+                serviceProvider.GetService<ConveyorSimulator>(),
+                serviceProvider.GetService<ConveyorSimulator>()
+            };
 
             timer.Elapsed += async (sender, eventArgs) =>
             {
