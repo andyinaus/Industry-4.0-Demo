@@ -33,6 +33,8 @@ namespace DeviceSimulation.Clients
 
         public async Task<HttpResponseMessage> SendSimulatedDeviceDataAsync(ConveyorSimulator simulator)
         {
+            if (simulator == null) throw new ArgumentNullException(nameof(simulator));
+
             HttpResponseMessage response = null;
 
             var content = new StringContent(JsonConvert.SerializeObject(simulator), Encoding.UTF8,
