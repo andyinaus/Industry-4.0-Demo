@@ -15,16 +15,14 @@ namespace DeviceSimulation.Clients
         private readonly ILogger _logger;
         private readonly HttpClient _client;
 
-        public IoTHttpClient(IOptions<IoTPlatformOptions> ioTOptions, IOptions<HttpClientOptions> httpOptions, ILogger<IoTHttpClient> logger)
+        public IoTHttpClient(IOptions<IoTPlatformOptions> ioTOptions, IOptions<HttpClientOptions> httpOptions, ILogger<IoTHttpClient> logger, HttpClient client)
         {
             HttpOptions = httpOptions?.Value ?? throw new ArgumentNullException(nameof(httpOptions));
             IoTOptions = ioTOptions?.Value ?? throw new ArgumentNullException(nameof(ioTOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _client = client ?? throw new ArgumentNullException(nameof(client));
 
-            _client = new HttpClient
-            {
-                BaseAddress = new Uri(IoTOptions.BaseAddress)
-            };
+            _client.BaseAddress = new Uri(IoTOptions.BaseAddress);
         }
         
         public HttpClientOptions HttpOptions { get; private set; }

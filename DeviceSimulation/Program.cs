@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
@@ -54,6 +55,7 @@ namespace DeviceSimulation
             services.AddLogging();
             InitializeSerilog();
 
+            services.AddSingleton(new HttpClient());
             services.AddSingleton<IoTHttpClient>();
             services.AddSingleton<IClock>(new Clock(DateTime.Now));
             services.AddTransient<ConveyorSimulator>();
