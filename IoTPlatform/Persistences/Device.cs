@@ -1,9 +1,21 @@
-﻿namespace IoTPlatform.Persistences
+﻿using System;
+
+namespace IoTPlatform.Persistences
 {
     public class Device
     {
-        public string Id { get; set; }
+        protected Device() { }
 
-        public DeviceType Type { get; set; }
+        public Device(string type)
+        {
+            if (string.IsNullOrWhiteSpace(type)) throw new ArgumentNullException(nameof(type));
+
+            Id = Guid.NewGuid().ToString();
+            Type = type;
+        }
+
+        public string Id { get; }
+
+        public string Type { get; }
     }
 }
