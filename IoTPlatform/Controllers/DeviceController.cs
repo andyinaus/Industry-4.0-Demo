@@ -63,7 +63,6 @@ namespace IoTPlatform.Controllers
         /// <response code="201">Returns device with the given id</response>
         /// <response code="400">If the id is invalid</response>  
         /// <response code="404">If no device found with the given id</response>    
-
         [HttpGet]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
