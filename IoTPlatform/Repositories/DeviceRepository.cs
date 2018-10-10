@@ -29,7 +29,7 @@ namespace IoTPlatform.Repositories
 
                 await connection.ExecuteAsync(sql, device);
 
-                Log.Information($"Device with ID '{device.Id}' added.");
+                Log.Information($"A device with ID '{device.Id}' added.");
 
                 return device.Id;
             }
