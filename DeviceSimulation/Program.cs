@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 using DeviceSimulation.Clients;
@@ -12,22 +11,19 @@ using DeviceSimulation.Simulators.Options;
 using DeviceSimulation.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Events;
 
 namespace DeviceSimulation
 {
     public class Program
     {
-        private static readonly IConfigurationRoot Configuration = GetConfiguration();
-        
+        private static readonly IConfigurationRoot Configuration = BuildConfiguration();
 
         private const string IoTPlatformSectionName = "IoTPlatform";
         private const string HttpClientSectionName = "HttpClient";
         private const string ConveyorSimulatorSectionName = "ConveyorSimulator";
 
-        private static IConfigurationRoot GetConfiguration()
+        private static IConfigurationRoot BuildConfiguration()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -36,11 +32,11 @@ namespace DeviceSimulation
             return builder.Build();
         }
 
-        private static void InitializeSerilog()
+        private static ILogger BuildLogger()
         {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.File($"{Assembly.GetExecutingAssembly().GetName().Name}.log")
-                .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Warning)
+            return new LoggerConfiguration()
+                .ReadFrom
+                .Configuration(Configuration)
                 .CreateLogger();
         }
 
@@ -50,10 +46,7 @@ namespace DeviceSimulation
             services.Configure<HttpClientOptions>(Configuration.GetSection(HttpClientSectionName));
             services.Configure<ConveyorSimulatorOptions>(Configuration.GetSection(ConveyorSimulatorSectionName));
 
-            services.AddSingleton(new LoggerFactory()
-                .AddSerilog());
-            services.AddLogging();
-            InitializeSerilog();
+            services.AddSingleton(BuildLogger());
 
             services.AddSingleton(new HttpClient());
             services.AddSingleton<IoTHttpClient>();

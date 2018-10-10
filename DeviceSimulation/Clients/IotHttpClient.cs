@@ -4,9 +4,9 @@ using System.Text;
 using System.Threading.Tasks;
 using DeviceSimulation.Clients.Options;
 using DeviceSimulation.Simulators;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Serilog;
 
 namespace DeviceSimulation.Clients
 {
@@ -17,7 +17,7 @@ namespace DeviceSimulation.Clients
         private readonly ILogger _logger;
         private readonly HttpClient _client;
 
-        public IoTHttpClient(IOptions<IoTPlatformOptions> ioTOptions, IOptions<HttpClientOptions> httpOptions, ILogger<IoTHttpClient> logger, HttpClient client)
+        public IoTHttpClient(IOptions<IoTPlatformOptions> ioTOptions, IOptions<HttpClientOptions> httpOptions, ILogger logger, HttpClient client)
         {
             _httpOptions = httpOptions?.Value ?? throw new ArgumentNullException(nameof(httpOptions));
             _ioTOptions = ioTOptions?.Value ?? throw new ArgumentNullException(nameof(ioTOptions));
@@ -50,7 +50,7 @@ namespace DeviceSimulation.Clients
                 {
                     if (i == _httpOptions.NumberOfRetries)
                     {
-                        _logger.LogWarning($"Error at Device {simulator.SerialNumber}: {exception.Message}");
+                        _logger.Warning($"Error at Device {simulator.SerialNumber}: {exception.Message}");
                     }
                     else
                     {
