@@ -64,7 +64,7 @@ namespace IoTPlatform.Controllers
         /// <response code="400">If the id is invalid</response>  
         /// <response code="404">If no device found with the given id</response>    
         [HttpGet]
-        [ProducesResponseType(201)]
+        [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public async Task<ActionResult<DeviceModel>> GetByIdAsync([Required] string id)
