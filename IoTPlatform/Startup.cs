@@ -27,6 +27,7 @@ namespace IoTPlatform
             });
             services.AddSingleton<IConnectionFactory, ConnectionFactory>();
             services.AddTransient<IDeviceRepository, DeviceRepository>();
+            services.AddTransient<IDeviceReadingRepository, DeviceReadingRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
