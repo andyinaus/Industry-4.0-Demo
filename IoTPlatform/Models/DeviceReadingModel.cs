@@ -8,7 +8,7 @@ namespace IoTPlatform.Models
         [Required]
         public string Id { get; set; }
 
-        [Required]
+        [DataType(DataType.DateTime)]
         public DateTime DateTime { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
