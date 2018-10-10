@@ -8,18 +8,18 @@ using DeviceSimulation.Clients.Options;
 using DeviceSimulation.Simulators;
 using DeviceSimulation.Simulators.Options;
 using DeviceSimulation.Utils;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Moq.Protected;
+using Serilog;
 
 namespace DeviceSimulation.Tests.Clients
 {
     [TestClass]
     public class IoTHttpClientTests
     {
-        private static ILogger<IoTHttpClient> _logger;
+        private static ILogger _logger;
         private static IOptions<HttpClientOptions> _httpOptions;
         private static IOptions<IoTPlatformOptions> _ioTPlatformOptions;
         private static Mock<HttpMessageHandler> _httpMessageHandlerMock;
@@ -28,7 +28,7 @@ namespace DeviceSimulation.Tests.Clients
         [TestInitialize]
         public void Init()
         {
-            _logger = Mock.Of<ILogger<IoTHttpClient>>();
+            _logger = Mock.Of<ILogger>();
             _httpOptions = Options.Create(new HttpClientOptions());
             _ioTPlatformOptions = Options.Create(new IoTPlatformOptions
             {
