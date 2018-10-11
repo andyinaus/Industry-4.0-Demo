@@ -43,14 +43,14 @@ namespace DeviceSimulation.Clients
                     response = await _client.PutAsync(_ioTOptions.RelativeSendingDataUrl, content);
 
                     response.EnsureSuccessStatusCode();
-                    Console.WriteLine($"Successfully sent for device {simulator.SerialNumber} with speed {simulator.Speed}.");
+                    Console.WriteLine($"Successfully sent for device {simulator.Id} with speed {simulator.Speed}.");
                     break;
                 }
                 catch (HttpRequestException exception)
                 {
                     if (i == _httpOptions.NumberOfRetries)
                     {
-                        _logger.Warning($"Error at Device {simulator.SerialNumber}: {exception.Message}");
+                        _logger.Warning($"Error at Device {simulator.Id}: {exception.Message}");
                     }
                     else
                     {
