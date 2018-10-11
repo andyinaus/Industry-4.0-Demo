@@ -18,7 +18,7 @@ namespace IoTPlatform.Models
         public string PackageTrackingAlarmState { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
-        public int CurrentTotalBoards { get; set; }
+        public int CurrentBoards { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int CurrentRecipeCount { get; set; }

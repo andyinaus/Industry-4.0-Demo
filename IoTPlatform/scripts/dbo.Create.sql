@@ -11,9 +11,9 @@ CREATE TABLE [dbo].[DeviceReadings]
 	(
 		[DeviceID] varchar(36) NOT NULL,
 		[DateTime] DateTime NOT NULL,
-		[Speed] int NOT NULL,
+		[Speed] INT NOT NULL,
 		[PackageTrackingAlarmState] varchar(10) NOT NULL,
-		[CurrentTotalBoards] INT NOT NULL,
+		[CurrentBoards] INT NOT NULL,
 		[CurrentRecipeCount] INT NOT NULL,
 		PRIMARY KEY ([DeviceID], [DateTime]),
 		FOREIGN KEY ([DeviceID]) REFERENCES dbo.Devices(ID)

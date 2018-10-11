@@ -12,7 +12,7 @@ namespace IoTPlatform.Persistences
 
         public string PackageTrackingAlarmState { get; set; }
 
-        public int CurrentTotalBoards { get; set; }
+        public int CurrentBoards { get; set; }
 
         public int CurrentRecipeCount { get; set; }
     }

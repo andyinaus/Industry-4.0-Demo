@@ -37,7 +37,7 @@ namespace IoTPlatform.Controllers
         ///        "PackageTrackingAlarmState": "Okay",
         ///        "Speed": 3,
         ///        "CurrentRecipeCount": 3,
-        ///        "CurrentTotalBoards": 3
+        ///        "CurrentBoards": 3
         ///     }
         ///
         /// </remarks>
@@ -59,7 +59,7 @@ namespace IoTPlatform.Controllers
                 DateTime = reading.DateTime,
                 Speed = reading.Speed,
                 PackageTrackingAlarmState = reading.PackageTrackingAlarmState,
-                CurrentTotalBoards = reading.CurrentTotalBoards,
+                CurrentBoards = reading.CurrentBoards,
                 CurrentRecipeCount = reading.CurrentRecipeCount
             });
 
@@ -95,7 +95,7 @@ namespace IoTPlatform.Controllers
             {
                 Id = r.DeviceId,
                 CurrentRecipeCount = r.CurrentRecipeCount,
-                CurrentTotalBoards = r.CurrentTotalBoards,
+                CurrentBoards = r.CurrentBoards,
                 DateTime = r.DateTime,
                 PackageTrackingAlarmState = r.PackageTrackingAlarmState,
                 Speed = r.Speed

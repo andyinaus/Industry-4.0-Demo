@@ -26,8 +26,8 @@ namespace IoTPlatform.Repositories
 
             using (var connection = await _connectionFactory.CreateConnection())
             {
-                var sql = $"INSERT INTO {TableName} (DeviceId, DateTime, Speed, PackageTrackingAlarmState, CurrentTotalBoards, CurrentRecipeCount)"
-                          + " VALUES(@DeviceId, @DateTime, @Speed, @PackageTrackingAlarmState, @CurrentTotalBoards, @CurrentRecipeCount)";
+                var sql = $"INSERT INTO {TableName} (DeviceId, DateTime, Speed, PackageTrackingAlarmState, CurrentBoards, CurrentRecipeCount)"
+                          + " VALUES(@DeviceId, @DateTime, @Speed, @PackageTrackingAlarmState, @CurrentBoards, @CurrentRecipeCount)";
 
                 await connection.ExecuteAsync(sql, reading);
 
