@@ -7,26 +7,26 @@ namespace DeviceSimulation.Simulators
 {
     public class ConveyorSimulator
     {
-        private readonly ConveyorSimulatorOptions _options;
+        private readonly ConveyorSimulatorOptions.SimulatorSettings _settings;
 
         public ConveyorSimulator(IClock clock, IOptions<ConveyorSimulatorOptions> options)
         {
             if (clock == null) throw new ArgumentNullException(nameof(clock));
             if (options?.Value == null) throw new ArgumentNullException(nameof(options));
-            if (options.Value?.Settings == null) throw new ArgumentNullException(nameof(options.Value.Settings));
+            if (options.Value.Settings == null) throw new ArgumentNullException(nameof(options.Value.Settings));
 
             SerialNumber = Guid.NewGuid();
             DateTime = clock.Now();
-            _options = options.Value;
+            _settings = options.Value.Settings;
         }
 
         public ConveyorSimulator Simulate()
         {
             var random = new Random();
-            Speed = random.Next(_options.Settings.SpeedMin, _options.Settings.SpeedMax);
+            Speed = random.Next(_settings.SpeedMin, _settings.SpeedMax);
             PackageTrackingAlarmState = (PackageTrackingAlarmState) random.Next(0, 1);
-            CurrentRecipeCount += random.Next(_options.Settings.MaximumItemsPerSecond);
-            CurrentTotalBoards += random.Next(_options.Settings.MaximumItemsPerSecond);
+            CurrentRecipeCount += random.Next(_settings.MaximumItemsPerSecond);
+            CurrentTotalBoards += random.Next(_settings.MaximumItemsPerSecond);
             DateTime = DateTime.AddSeconds(1);
 
             return this;
