@@ -21,7 +21,8 @@ namespace DeviceSimulation
 
         private const string IoTPlatformSectionName = "IoTPlatform";
         private const string HttpClientSectionName = "HttpClient";
-        private const string ConveyorSimulatorSectionName = "ConveyorSimulator";
+        private const string SimulatorSettingsSectionName = "SimulatorSettings";
+        private const string RequiredSimulatorsSectionName = "RequiredSimulators";
 
         private static IConfigurationRoot BuildConfiguration()
         {
@@ -44,14 +45,14 @@ namespace DeviceSimulation
         {
             services.Configure<IoTPlatformOptions>(Configuration.GetSection(IoTPlatformSectionName));
             services.Configure<HttpClientOptions>(Configuration.GetSection(HttpClientSectionName));
-            services.Configure<ConveyorSimulatorOptions>(Configuration.GetSection(ConveyorSimulatorSectionName));
+            services.Configure<SimulatorSettingsOptions>(Configuration.GetSection(SimulatorSettingsSectionName));
+            services.Configure<RequiredSimulatorsOptions>(Configuration.GetSection(RequiredSimulatorsSectionName));
 
             services.AddSingleton(BuildLogger());
 
             services.AddSingleton(new HttpClient());
             services.AddSingleton<IoTHttpClient>();
             services.AddSingleton<IClock>(new Clock(DateTime.Now));
-            services.AddTransient<ConveyorSimulator>();
         }
 
         public static void Main(string[] args)
