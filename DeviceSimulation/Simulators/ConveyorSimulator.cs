@@ -9,13 +9,14 @@ namespace DeviceSimulation.Simulators
     {
         private readonly ConveyorSimulatorOptions.SimulatorSettings _settings;
 
-        public ConveyorSimulator(IClock clock, IOptions<ConveyorSimulatorOptions> options)
+        public ConveyorSimulator(string id, IClock clock, IOptions<ConveyorSimulatorOptions> options)
         {
+            if (string.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
             if (clock == null) throw new ArgumentNullException(nameof(clock));
             if (options?.Value == null) throw new ArgumentNullException(nameof(options));
             if (options.Value.Settings == null) throw new ArgumentNullException(nameof(options.Value.Settings));
 
-            SerialNumber = Guid.NewGuid();
+            Id = id;
             DateTime = clock.Now();
             _settings = options.Value.Settings;
         }
@@ -32,7 +33,7 @@ namespace DeviceSimulation.Simulators
             return this;
         }
 
-        public Guid SerialNumber { get; private set; }
+        public string Id { get; private set; }
 
         public DateTime DateTime { get; private set; }
 
