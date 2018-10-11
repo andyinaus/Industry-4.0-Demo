@@ -40,7 +40,7 @@ namespace DeviceSimulation.Clients
             {
                 try
                 {
-                    response = await _client.PutAsync(_ioTOptions.RelativeSendingDataUrl, content);
+                    response = await _client.PostAsync(_ioTOptions.RelativeSendingDataUrl, content);
 
                     response.EnsureSuccessStatusCode();
                     Console.WriteLine($"Successfully sent for device {simulator.Id} with speed {simulator.Speed}.");
