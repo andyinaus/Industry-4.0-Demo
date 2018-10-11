@@ -94,7 +94,7 @@ namespace DeviceSimulation.Tests.Clients
         }
 
         [TestMethod]
-        public void SendSimulatedDeviceDataAsyncWithProperRelativeSendingDataUrlShouldSendToCorrectDest()
+        public void SendSimulatedDeviceDataAsyncWithProperRelativeSendingDataUrlShouldSendHttpPostRequestToCorrectDest()
         {
             SetResponseForHttpMessageHandlerMock();
             _ioTPlatformOptions.Value.BaseAddress = "http://localhost:9090";
@@ -108,7 +108,7 @@ namespace DeviceSimulation.Tests.Clients
             var expectedDestination = new Uri($"{_ioTPlatformOptions.Value.BaseAddress}{_ioTPlatformOptions.Value.RelativeSendingDataUrl}");
 
             _httpMessageHandlerMock.Protected().Verify("SendAsync", Times.Once(), 
-                ItExpr.Is<HttpRequestMessage>(req => req.Method == HttpMethod.Put && req.RequestUri == expectedDestination),
+                ItExpr.Is<HttpRequestMessage>(req => req.Method == HttpMethod.Post && req.RequestUri == expectedDestination),
                 ItExpr.IsAny<CancellationToken>());
         }
 
