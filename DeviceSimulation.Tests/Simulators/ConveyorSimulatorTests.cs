@@ -59,7 +59,7 @@ namespace DeviceSimulation.Tests.Simulators
             Assert.IsTrue(simulator.Speed >= options.Value.SpeedMin);
             Assert.IsTrue(simulator.Speed <= options.Value.SpeedMax);
             Assert.IsTrue(simulator.CurrentRecipeCount <= options.Value.MaximumItemsPerSecond);
-            Assert.IsTrue(simulator.CurrentTotalBoards <= options.Value.MaximumItemsPerSecond);
+            Assert.IsTrue(simulator.CurrentBoards <= options.Value.MaximumItemsPerSecond);
         }
     }
 }

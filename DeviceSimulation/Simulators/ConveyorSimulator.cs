@@ -25,8 +25,8 @@ namespace DeviceSimulation.Simulators
             var random = new Random();
             Speed = random.Next(_options.SpeedMin, _options.SpeedMax);
             PackageTrackingAlarmState = (PackageTrackingAlarmState) random.Next(0, 1);
-            CurrentRecipeCount += random.Next(_options.MaximumItemsPerSecond);
-            CurrentTotalBoards += random.Next(_options.MaximumItemsPerSecond);
+            CurrentRecipeCount = random.Next(_options.MaximumItemsPerSecond);
+            CurrentBoards = random.Next(_options.MaximumItemsPerSecond);
             DateTime = DateTime.AddSeconds(1);
 
             return this;
@@ -40,7 +40,7 @@ namespace DeviceSimulation.Simulators
 
         public PackageTrackingAlarmState PackageTrackingAlarmState { get; private set; }
         
-        public int CurrentTotalBoards { get; private set; }
+        public int CurrentBoards { get; private set; }
 
         public int CurrentRecipeCount { get; private set; }
     }
