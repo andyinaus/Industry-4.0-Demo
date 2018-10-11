@@ -7,7 +7,6 @@ using System.Timers;
 using DeviceSimulation.Clients;
 using DeviceSimulation.Clients.Options;
 using DeviceSimulation.Factories;
-using DeviceSimulation.Simulators;
 using DeviceSimulation.Simulators.Options;
 using DeviceSimulation.Utils;
 using Microsoft.Extensions.Configuration;
@@ -72,7 +71,6 @@ namespace DeviceSimulation
             Console.WriteLine("Preparing simulation ...");
 
             var client = serviceProvider.GetService<IoTHttpClient>();
-            var timer = new Timer(1000);
 
             var factory = serviceProvider.GetService<ISimulatorFactory>();
             var requiredDeviceIds = serviceProvider.GetService<IOptions<RequiredSimulatorsOptions>>()
@@ -80,9 +78,11 @@ namespace DeviceSimulation
             var requiredSimulators = requiredDeviceIds.Select(
                 s => factory.CreateSimulator(s));
 
+            var timer = new Timer(1000);
             timer.Elapsed += async (sender, eventArgs) =>
             {
-                var tasks = requiredSimulators.Select(s => client.SendSimulatedDeviceDataAsync(s.Simulate()));
+                requiredSimulators = requiredSimulators.Select(s => s.Simulate());
+                var tasks = requiredSimulators.Select(s => client.SendSimulatedDeviceDataAsync(s));
                 await Task.WhenAll(tasks);
             };
 
