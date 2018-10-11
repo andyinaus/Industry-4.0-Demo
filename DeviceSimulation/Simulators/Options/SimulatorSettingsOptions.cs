@@ -2,7 +2,6 @@
 {
     public class SimulatorSettingsOptions
     {
-        
         public SimulatorSettings Settings { get; set; }
 
         public class SimulatorSettings
