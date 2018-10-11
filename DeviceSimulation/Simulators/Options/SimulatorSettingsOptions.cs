@@ -1,17 +1,9 @@
-﻿using System.Collections.Generic;
-
-namespace DeviceSimulation.Simulators.Options
+﻿namespace DeviceSimulation.Simulators.Options
 {
-    public class ConveyorSimulatorOptions
+    public class SimulatorSettingsOptions
     {
-        public IEnumerable<Simulator> Simulators { get; set; }
         
         public SimulatorSettings Settings { get; set; }
-
-        public class Simulator
-        {
-            public string DeviceId { get; set; }
-        }
 
         public class SimulatorSettings
         {
