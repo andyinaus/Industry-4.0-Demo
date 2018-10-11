@@ -133,10 +133,7 @@ namespace DeviceSimulation.Tests.Clients
 
         private static IOptions<SimulatorSettingsOptions> CreateDummySimulatorSettingsOptions()
         {
-            return Options.Create(new SimulatorSettingsOptions
-            {
-                Settings = new SimulatorSettingsOptions.SimulatorSettings()
-            });
+            return Options.Create(new SimulatorSettingsOptions());
         }
 
         private static void SetResponseForHttpMessageHandlerMock(HttpResponseMessage message = null)

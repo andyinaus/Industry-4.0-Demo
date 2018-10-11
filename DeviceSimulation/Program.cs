@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using System.Timers;
 using DeviceSimulation.Clients;
 using DeviceSimulation.Clients.Options;
+using DeviceSimulation.Factories;
 using DeviceSimulation.Simulators;
 using DeviceSimulation.Simulators.Options;
 using DeviceSimulation.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace DeviceSimulation
@@ -53,6 +55,7 @@ namespace DeviceSimulation
             services.AddSingleton(new HttpClient());
             services.AddSingleton<IoTHttpClient>();
             services.AddSingleton<IClock>(new Clock(DateTime.Now));
+            services.AddSingleton<ISimulatorFactory, SimulatorFactory>();
         }
 
         public static void Main(string[] args)
@@ -71,16 +74,15 @@ namespace DeviceSimulation
             var client = serviceProvider.GetService<IoTHttpClient>();
             var timer = new Timer(1000);
 
-            var simulatedConveyors = new[]
-            {
-                serviceProvider.GetService<ConveyorSimulator>(),
-                serviceProvider.GetService<ConveyorSimulator>(),
-                serviceProvider.GetService<ConveyorSimulator>()
-            };
+            var factory = serviceProvider.GetService<ISimulatorFactory>();
+            var requiredDeviceIds = serviceProvider.GetService<IOptions<RequiredSimulatorsOptions>>()
+                .Value.Simulators.Select(s => s.DeviceId);
+            var requiredSimulators = requiredDeviceIds.Select(
+                s => factory.CreateSimulator(s));
 
             timer.Elapsed += async (sender, eventArgs) =>
             {
-                var tasks = simulatedConveyors.Select(s => client.SendSimulatedDeviceDataAsync(s.Simulate()));
+                var tasks = requiredSimulators.Select(s => client.SendSimulatedDeviceDataAsync(s.Simulate()));
                 await Task.WhenAll(tasks);
             };
 

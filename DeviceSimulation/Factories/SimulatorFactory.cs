@@ -15,7 +15,6 @@ namespace DeviceSimulation.Factories
         {
             if (clock == null) throw new ArgumentNullException(nameof(clock));
             if (options?.Value == null) throw new ArgumentNullException(nameof(options));
-            if (options.Value.Settings == null) throw new ArgumentNullException(nameof(options.Value.Settings));
 
             _options = options;
             _clock = clock;

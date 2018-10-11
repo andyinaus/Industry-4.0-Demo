@@ -2,15 +2,10 @@
 {
     public class SimulatorSettingsOptions
     {
-        public SimulatorSettings Settings { get; set; }
+        public int SpeedMin { get; set; }
 
-        public class SimulatorSettings
-        {
-            public int SpeedMin { get; set; }
+        public int SpeedMax { get; set; }
 
-            public int SpeedMax { get; set; }
-
-            public int MaximumItemsPerSecond { get; set; }
-        }
+        public int MaximumItemsPerSecond { get; set; }
     }
 }

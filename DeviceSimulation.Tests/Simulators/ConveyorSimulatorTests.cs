@@ -43,39 +43,23 @@ namespace DeviceSimulation.Tests.Simulators
         }
 
         [TestMethod]
-        public void SimulateWhenSimulatorOptionsHaveNoSettingsShouldThrowArgumentNullException()
-        {
-            var options = Options.Create(new SimulatorSettingsOptions
-            {
-                Settings = null
-            });
-
-            Action target = () => new ConveyorSimulator("1234", new Clock(DateTime.Now), options);
-
-            Assert.ThrowsException<ArgumentNullException>(target);
-        }
-
-        [TestMethod]
         public void SimulateWithValidSimulatorOptionsShouldSimulateAccordingly()
         {
             var options = Options.Create(new SimulatorSettingsOptions
             {
-                Settings = new SimulatorSettingsOptions.SimulatorSettings
-                {
-                    MaximumItemsPerSecond = 4,
-                    SpeedMax = 10,
-                    SpeedMin = 5
-                }
+                MaximumItemsPerSecond = 4,
+                SpeedMax = 10,
+                SpeedMin = 5
             });
 
             var simulator = new ConveyorSimulator("1234", new Clock(DateTime.Now), options);
 
             simulator.Simulate();
 
-            Assert.IsTrue(simulator.Speed >= options.Value.Settings.SpeedMin);
-            Assert.IsTrue(simulator.Speed <= options.Value.Settings.SpeedMax);
-            Assert.IsTrue(simulator.CurrentRecipeCount <= options.Value.Settings.MaximumItemsPerSecond);
-            Assert.IsTrue(simulator.CurrentTotalBoards <= options.Value.Settings.MaximumItemsPerSecond);
+            Assert.IsTrue(simulator.Speed >= options.Value.SpeedMin);
+            Assert.IsTrue(simulator.Speed <= options.Value.SpeedMax);
+            Assert.IsTrue(simulator.CurrentRecipeCount <= options.Value.MaximumItemsPerSecond);
+            Assert.IsTrue(simulator.CurrentTotalBoards <= options.Value.MaximumItemsPerSecond);
         }
     }
 }
