@@ -13,7 +13,7 @@ namespace DeviceSimulation.Tests.Simulators
         [TestMethod]
         public void CtorWhenClockIsNullShouldThrowArgumentNullException()
         {
-            Action target = () => new ConveyorSimulator(null, Options.Create(new ConveyorSimulatorOptions()));
+            Action target = () => new ConveyorSimulator("123", null, Options.Create(new SimulatorSettingsOptions()));
 
             Assert.ThrowsException<ArgumentNullException>(target);
         }
@@ -21,7 +21,7 @@ namespace DeviceSimulation.Tests.Simulators
         [TestMethod]
         public void CtorWhenSimulatorOptionsIsNullShouldThrowArgumentNullException()
         {
-            Action target = () => new ConveyorSimulator(new Clock(DateTime.Now), null);
+            Action target = () => new ConveyorSimulator("1234", new Clock(DateTime.Now), null);
 
             Assert.ThrowsException<ArgumentNullException>(target);
         }
@@ -29,12 +29,12 @@ namespace DeviceSimulation.Tests.Simulators
         [TestMethod]
         public void SimulateWhenSimulatorOptionsHaveNoSettingsShouldThrowArgumentNullException()
         {
-            var options = Options.Create(new ConveyorSimulatorOptions
+            var options = Options.Create(new SimulatorSettingsOptions
             {
                 Settings = null
             });
 
-            Action target = () => new ConveyorSimulator(new Clock(DateTime.Now), options);
+            Action target = () => new ConveyorSimulator("1234", new Clock(DateTime.Now), options);
 
             Assert.ThrowsException<ArgumentNullException>(target);
         }
@@ -42,9 +42,9 @@ namespace DeviceSimulation.Tests.Simulators
         [TestMethod]
         public void SimulateWithValidSimulatorOptionsShouldSimulateAccordingly()
         {
-            var options = Options.Create(new ConveyorSimulatorOptions
+            var options = Options.Create(new SimulatorSettingsOptions
             {
-                Settings = new ConveyorSimulatorOptions.SimulatorSettings
+                Settings = new SimulatorSettingsOptions.SimulatorSettings
                 {
                     MaximumItemsPerSecond = 4,
                     SpeedMax = 10,
@@ -52,7 +52,7 @@ namespace DeviceSimulation.Tests.Simulators
                 }
             });
 
-            var simulator = new ConveyorSimulator(new Clock(DateTime.Now), options);
+            var simulator = new ConveyorSimulator("1234", new Clock(DateTime.Now), options);
 
             simulator.Simulate();
 

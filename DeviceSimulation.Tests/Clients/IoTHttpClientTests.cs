@@ -101,7 +101,7 @@ namespace DeviceSimulation.Tests.Clients
             _ioTPlatformOptions.Value.RelativeSendingDataUrl = "/test/123";
 
             var client = new IoTHttpClient(_ioTPlatformOptions, _httpOptions, _logger, _client);
-            var simulator = new ConveyorSimulator(new Clock(DateTime.Now), Options.Create(new ConveyorSimulatorOptions()));
+            var simulator = new ConveyorSimulator(new Clock(DateTime.Now), Options.Create(new SimulatorSettingsOptions()));
 
             client.SendSimulatedDeviceDataAsync(simulator).Wait();
 
@@ -122,7 +122,7 @@ namespace DeviceSimulation.Tests.Clients
             _httpOptions.Value.NumberOfRetries = 5;
 
             var client = new IoTHttpClient(_ioTPlatformOptions, _httpOptions, _logger, _client);
-            var simulator = new ConveyorSimulator(new Clock(DateTime.Now), Options.Create(new ConveyorSimulatorOptions()));
+            var simulator = new ConveyorSimulator(new Clock(DateTime.Now), Options.Create(new SimulatorSettingsOptions()));
 
             client.SendSimulatedDeviceDataAsync(simulator).Wait();
 
