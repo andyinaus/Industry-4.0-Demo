@@ -11,6 +11,22 @@ namespace DeviceSimulation.Tests.Simulators
     public class ConveyorSimulatorTests
     {
         [TestMethod]
+        public void CtorWhenIdIsNullShouldThrowArgumentNullException()
+        {
+            Action target = () => new ConveyorSimulator(null, new Clock(DateTime.Now), Options.Create(new SimulatorSettingsOptions()));
+
+            Assert.ThrowsException<ArgumentNullException>(target);
+        }
+
+        [TestMethod]
+        public void CtorWhenIdIsWhiteSpaceShouldThrowArgumentNullException()
+        {
+            Action target = () => new ConveyorSimulator(" ", new Clock(DateTime.Now), Options.Create(new SimulatorSettingsOptions()));
+
+            Assert.ThrowsException<ArgumentNullException>(target);
+        }
+
+        [TestMethod]
         public void CtorWhenClockIsNullShouldThrowArgumentNullException()
         {
             Action target = () => new ConveyorSimulator("123", null, Options.Create(new SimulatorSettingsOptions()));
