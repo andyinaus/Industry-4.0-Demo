@@ -1,0 +1,33 @@
+﻿@model IEnumerable<DeviceModel>
+
+
+@{
+    ViewBag.Title = "Registered Devices";
+    Layout = "_Layout";
+}
+
+<h2>Registered Devices</h2>
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info" role="alert">Currently there is no devices registered here on this platform yet.</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var device in Model)
+        {
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Device: @device.Id</h3>
+                    </div>
+                    <div class="panel-body">
+                        Type: @device.Type
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+

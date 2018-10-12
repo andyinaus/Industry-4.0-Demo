@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using IoTPlatform.Models;
 using IoTPlatform.Persistences;
@@ -8,10 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IoTPlatform.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DeviceController : ControllerBase
+    public class DeviceController : Controller
     {
         private readonly IDeviceRepository _deviceRepository;
 
@@ -20,64 +17,33 @@ namespace IoTPlatform.Controllers
             _deviceRepository = deviceRepository ?? throw new ArgumentNullException(nameof(deviceRepository));
         }
 
-        /// <summary>
-        /// Creates a Device.
-        /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     POST /Device
-        ///     {
-        ///        "Type": "Conveyor"
-        ///     }
-        ///
-        /// </remarks>
-        /// <param name="device"></param>
-        /// <returns>A newly created device</returns>
-        /// <response code="201">Returns the newly created device</response>
-        /// <response code="400">If the devie is null</response>           
-        [HttpPost]
-        [ProducesResponseType(201)]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult<JsonResult>> CreateAsync(DeviceModel device)
+        [HttpGet]
+        public async Task <IActionResult> Index()
         {
-            var deviceId = await _deviceRepository.AddAsync(new Device(device.Type));
+            var devices = await _deviceRepository.GetAllAsync();
 
-            return Created(string.Empty, new {Id = deviceId});
+            return View(devices.Select(d => new DeviceModel
+            {
+                Id = d.Id,
+                Type = d.Type
+            }));
         }
 
-        /// <summary>
-        /// Gets a Device.
-        /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     GET /Device
-        ///     {
-        ///        "id": "Conveyor"
-        ///     }
-        ///
-        /// </remarks>
-        /// <param name="id"></param>
-        /// <returns>A device with the given id</returns>
-        /// <response code="201">Returns device with the given id</response>
-        /// <response code="400">If the id is invalid</response>  
-        /// <response code="404">If no device found with the given id</response>    
         [HttpGet]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<DeviceModel>> GetByIdAsync([Required] string id)
+        public IActionResult Register()
         {
-            var device = await _deviceRepository.GetByIdAsync(id);
+            return View();
+        }
 
-            if (device == null) return NotFound();
+        [HttpPost]
+        public async Task<IActionResult> Register(DeviceModel device)
+        {
+            if (!ModelState.IsValid)
+                return View();
 
-            return new DeviceModel
-            {
-                Id = device.Id,
-                Type = device.Type
-            };
+            await _deviceRepository.AddAsync(new Device(device.Type));
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
