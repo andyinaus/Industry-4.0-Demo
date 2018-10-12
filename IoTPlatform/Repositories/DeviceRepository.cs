@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -47,6 +48,16 @@ namespace IoTPlatform.Repositories
                 var devices = await connection.QueryAsync<Device>(sql, new {Id = id});
 
                 return devices.FirstOrDefault();
+            }
+        }
+
+        public async Task<IEnumerable<Device>> GetAllAsync()
+        {
+            using (var connection = await _connectionFactory.CreateConnection())
+            {
+                var sql = $"SELECT * FROM {TableName}";
+
+                return await connection.QueryAsync<Device>(sql);
             }
         }
     }

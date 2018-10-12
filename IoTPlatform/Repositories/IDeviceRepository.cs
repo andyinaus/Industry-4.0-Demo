@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using IoTPlatform.Persistences;
 
 namespace IoTPlatform.Repositories
@@ -8,5 +9,7 @@ namespace IoTPlatform.Repositories
         Task<string> AddAsync(Device device);
 
         Task<Device> GetByIdAsync(string id);
+
+        Task<IEnumerable<Device>> GetAllAsync();
     }
 }
