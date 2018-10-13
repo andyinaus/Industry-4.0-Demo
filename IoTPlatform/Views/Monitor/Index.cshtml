@@ -1,8 +1,25 @@
-﻿@model object
-
-@{
+﻿@{
     ViewBag.Title = "Monitor ...";
     Layout = "_Layout";
 }
 
-<h2></h2>
+<h2>Monitoring ...</h2>
+
+<div id="Monitor" class="row">
+    <div v-for="reading in latestReadings" class="col-md-3">
+        <div class="thumbnail">
+            <img src="/images/Device.svg" alt="IoT Device" class="img-thumbnail">
+            <div class="caption">
+                <h4>Device: {{reading.id}}</h4>
+                <p>Type: {{reading.deviceType}}</p>
+                <p>DateTime: {{reading.dateTime}}</p>
+                <p>Speed: {{reading.speed}}</p>
+                <p>Package Tracking Alarm State: {{reading.packageTrackingAlarmState}}</p>
+                <p>Total Boards: {{reading.totalBoards}}</p>
+                <p>Recipe Count: {{reading.recipeCount}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<svg id="Trend_svg" width="480" height="500"></svg>
