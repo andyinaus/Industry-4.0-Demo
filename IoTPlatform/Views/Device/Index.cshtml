@@ -16,13 +16,12 @@ else
     <div class="row">
         @foreach (var device in Model)
         {
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Device: @device.Id</h3>
-                    </div>
-                    <div class="panel-body">
-                        Type: @device.Type
+            <div class="col-md-3">
+                <div class="thumbnail">
+                    <img src="/images/Device.svg" alt="IoT Device" class="img-thumbnail">
+                    <div class="caption">
+                        <h4>Device: @device.Id</h4>
+                        <p>Type: @device.Type</p>
                     </div>
                 </div>
             </div>
