@@ -12,7 +12,8 @@ namespace IoTPlatform.Repositories
     {
         private readonly IConnectionFactory _connectionFactory;
 
-        private const string TableName = "DeviceReadings";
+        private const string DeviceReadingsTableName = "DeviceReadings";
+        private const string DevicesTableName = "Devices";
 
         public DeviceReadingRepository(IConnectionFactory connectionFactory)
         {
@@ -26,8 +27,10 @@ namespace IoTPlatform.Repositories
 
             using (var connection = await _connectionFactory.CreateConnection())
             {
-                var sql = $"INSERT INTO {TableName} (DeviceId, DateTime, Speed, PackageTrackingAlarmState, CurrentBoards, CurrentRecipeCount)"
-                          + " VALUES(@DeviceId, @DateTime, @Speed, @PackageTrackingAlarmState, @CurrentBoards, @CurrentRecipeCount)";
+                var sql = $"INSERT INTO {DeviceReadingsTableName} ({nameof(DeviceReading.DeviceId)}, {nameof(DeviceReading.DateTime)}, {nameof(DeviceReading.Speed)}," +
+                          $" {nameof(DeviceReading.PackageTrackingAlarmState)}, {nameof(DeviceReading.CurrentBoards)}, {nameof(DeviceReading.CurrentRecipeCount)})"
+                          + $" VALUES(@{nameof(DeviceReading.DeviceId)}, @{nameof(DeviceReading.DateTime)}, @{nameof(DeviceReading.Speed)}," +
+                          $" @{nameof(DeviceReading.PackageTrackingAlarmState)}, @{nameof(DeviceReading.CurrentBoards)}, @{nameof(DeviceReading.CurrentRecipeCount)})";
 
                 await connection.ExecuteAsync(sql, reading);
 
@@ -41,10 +44,32 @@ namespace IoTPlatform.Repositories
 
             using (var connection = await _connectionFactory.CreateConnection())
             {
-                var sql = $"SELECT * FROM {TableName}"
-                          + " WHERE DeviceId = @Id";
+                var sql = $"SELECT * FROM {DeviceReadingsTableName} AS R INNER JOIN {DevicesTableName} AS D" +
+                          $" ON R.{nameof(DeviceReading.DeviceId)} = D.{nameof(Device.Id)}"
+                          + $" WHERE {nameof(DeviceReading.DeviceId)} = @Id";
 
-                return await connection.QueryAsync<DeviceReading>(sql, new { Id = id });
+                return await connection.QueryAsync<DeviceReading, Device, DeviceReading>(sql,
+                    (reading, device) =>
+                    {
+                        reading.DeviceType = device.Type;
+                        return reading;
+                    }, splitOn: $"{nameof(Device.Type)}", param: new { Id = id });
+            }
+        }
+
+        public async Task<IEnumerable<DeviceReading>> GetAllReadingsAsync()
+        {
+            using (var connection = await _connectionFactory.CreateConnection())
+            {
+                var sql = $"SELECT * FROM {DeviceReadingsTableName} AS R INNER JOIN {DevicesTableName} AS D" +
+                          $" ON R.{nameof(DeviceReading.DeviceId)} = D.{nameof(Device.Id)}";
+
+                return await connection.QueryAsync<DeviceReading, Device, DeviceReading>(sql,
+                    (reading, device) =>
+                    {
+                        reading.DeviceType = device.Type;
+                        return reading;
+                    }, splitOn: $"{nameof(Device.Type)}");
             }
         }
     }

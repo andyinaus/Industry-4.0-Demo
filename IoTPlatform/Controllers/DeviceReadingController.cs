@@ -80,20 +80,20 @@ namespace IoTPlatform.Controllers
         /// </remarks>
         /// <param name="id"></param>
         /// <returns>All device readings with the given id</returns>
-        /// <response code="201">Returns all device readings with the given id</response>
+        /// <response code="200">Returns all device readings with the given id</response>
         /// <response code="400">If the id is invalid</response>  
         /// <response code="404">If no device readings found with the given id</response>    
-        [HttpGet]
+        [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<IEnumerable<DeviceReadingModel>>> GetAllByIdAsync([Required] string id)
+        public async Task<ActionResult<DeviceReadingsModel>> GetAllByIdAsync([Required] string id)
         {
-            var results = await _deviceReadingRepository.GetAllReadingsByIdAsync(id);
+            var results = (await _deviceReadingRepository.GetAllReadingsByIdAsync(id)).ToList();
+            if (!results.Any()) return NotFound();
 
-            var deviceReadings = results.Select(r => new DeviceReadingModel
+            var readings = results.Select(r => new DeviceReadingsModel.Reading
             {
-                Id = r.DeviceId,
                 CurrentRecipeCount = r.CurrentRecipeCount,
                 CurrentBoards = r.CurrentBoards,
                 DateTime = r.DateTime,
@@ -101,7 +101,56 @@ namespace IoTPlatform.Controllers
                 Speed = r.Speed
             }).ToList();
 
-            if (!deviceReadings.Any()) return NotFound();
+            return new DeviceReadingsModel
+            {
+                Id = results.FirstOrDefault()?.DeviceId,
+                DeviceType = results.FirstOrDefault()?.DeviceType,
+                Readings = readings
+            };
+        }
+
+        /// <summary>
+        /// Gets All DeviceReadings.
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET /Device
+        ///     
+        ///
+        /// </remarks>
+        /// <returns>All device readings</returns>
+        /// <response code="200">Returns all device readings</response>
+        /// <response code="404">If no device readings found</response>    
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<ActionResult<IEnumerable<DeviceReadingsModel>>> GetAllAsync()
+        {
+            var results = (await _deviceReadingRepository.GetAllReadingsAsync()).ToList();
+            if (!results.Any()) return NotFound();
+
+            var deviceReadings = new List<DeviceReadingsModel>();
+
+            var groups = results.GroupBy(g => g.DeviceId);
+            foreach (var group in groups)
+            {
+                var readings = group.Select(g => new DeviceReadingsModel.Reading
+                {
+                    CurrentRecipeCount = g.CurrentRecipeCount,
+                    CurrentBoards = g.CurrentBoards,
+                    DateTime = g.DateTime,
+                    PackageTrackingAlarmState = g.PackageTrackingAlarmState,
+                    Speed = g.Speed
+                });
+
+                deviceReadings.Add(new DeviceReadingsModel
+                {
+                    Id = group.Key,
+                    DeviceType = group.FirstOrDefault()?.DeviceType,
+                    Readings = readings
+                });
+            }
 
             return deviceReadings;
         }
