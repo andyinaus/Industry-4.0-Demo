@@ -34,12 +34,20 @@
     }
 }
 
-.axis--x path {
-    display: none;
-}
-
 .line {
     fill: none;
     stroke: steelblue;
     stroke-width: 1.5px;
+}
+
+.legend {
+    margin-bottom: 76px;
+    display: inline-block;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
+
+.legend td {
+    padding: 4px 5px;
+    vertical-align: bottom;
 }
