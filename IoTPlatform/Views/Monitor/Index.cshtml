@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Monitor ...";
+    ViewBag.Title = "Monitoring ...";
     Layout = "_Layout";
 }
 
@@ -16,10 +16,23 @@
                 <p>Speed: {{reading.speed}}</p>
                 <p>Package Tracking Alarm State: {{reading.packageTrackingAlarmState}}</p>
                 <p>Total Boards: {{reading.totalBoards}}</p>
-                <p>Recipe Count: {{reading.recipeCount}}</p>
+                <p>Recipe Count: {{reading.totalRecipeCount}}</p>
             </div>
         </div>
     </div>
 </div>
 
-<svg id="Trend_svg" width="480" height="500"></svg>
+<div class="row" >
+    <div class="col-md-6 col-md-offset-3" id="legend">
+    </div>
+</div>
+<div class="row" id="Chars">
+    <div class="col-md-6">
+        <svg id="Trend_svg" width="480" height="500"></svg>
+    </div>
+    <div class="col-md-6">
+        <svg id="Bar_svg" width="480" height="500"></svg>
+    </div>
+</div>
+
+
