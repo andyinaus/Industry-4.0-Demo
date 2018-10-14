@@ -3,7 +3,7 @@ if (document.getElementById("Monitor")) {
     var monitorVue = new Vue({
         el: '#Monitor',
         data: {
-            latestReadings: [],
+            latestReadings: null,
             transitionSettings: {
                 duration: 1000,
                 ease: d3.easeLinear
@@ -190,11 +190,14 @@ if (document.getElementById("Monitor")) {
                 var xAxis = d3.axisBottom()
                     .scale(xScale);
 
-                svgSettings.container.append("g")
+                var xAxisSection = svgSettings.container.append("g")
                     .attr("class", "x axis")
                     .attr("transform", "translate(0," + svgSettings.height + ")")
-                    .call(xAxis)
-                    .append("text")
+                    .call(xAxis);
+
+                xAxisSection.selectAll("text")
+                    .attr("transform", "rotate(355)");
+                xAxisSection.append("text")
                     .attr("dx", "-1.5em")
                     .attr("color", "white")
                     .attr("x", svgSettings.width)
@@ -209,10 +212,11 @@ if (document.getElementById("Monitor")) {
                 var yAxis = d3.axisLeft()
                     .scale(yScale);
 
-                svgSettings.container.append("g")
+                var yAxisSection = svgSettings.container.append("g")
                     .attr("class", "y axis")
-                    .call(yAxis)
-                    .append("text")
+                    .call(yAxis);
+
+                yAxisSection.append("text")
                     .attr("transform", "rotate(-90)")
                     .attr("y", 6)
                     .attr("dy", "0.71em")
@@ -253,6 +257,12 @@ if (document.getElementById("Monitor")) {
                     }));
 
                     yScale.domain([0, d3.max(newDataSet, (d) => d.boards)]);
+                    yAxis.scale(yScale);
+                    yAxisSection
+						.transition()
+                        .duration(transitionSettings.duration)
+                        .ease(transitionSettings.ease)
+						.call(yAxis);
 
                     rects.data(newDataSet)
                         .transition()

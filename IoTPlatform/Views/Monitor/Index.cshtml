@@ -5,7 +5,7 @@
 
 <h2>Monitoring ...</h2>
 
-<div id="Monitor" class="row">
+<div id="Monitor" class="row" v-if="latestReadings">
     <div v-for="reading in latestReadings" class="col-md-3">
         <div class="thumbnail">
             <img src="/images/Device.svg" alt="IoT Device" class="img-thumbnail">
