@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using IoTPlatform.Infrastructures;
@@ -38,38 +39,37 @@ namespace IoTPlatform.Repositories
             }
         }
 
-        public async Task<IEnumerable<DeviceReading>> GetAllReadingsByIdAsync(string id)
-        {
-            if (string.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
-
-            using (var connection = await _connectionFactory.CreateConnection())
-            {
-                var sql = $"SELECT * FROM {DeviceReadingsTableName} AS R INNER JOIN {DevicesTableName} AS D" +
-                          $" ON R.{nameof(DeviceReading.DeviceId)} = D.{nameof(Device.Id)}"
-                          + $" WHERE {nameof(DeviceReading.DeviceId)} = @Id";
-
-                return await connection.QueryAsync<DeviceReading, Device, DeviceReading>(sql,
-                    (reading, device) =>
-                    {
-                        reading.DeviceType = device.Type;
-                        return reading;
-                    }, splitOn: $"{nameof(Device.Type)}", param: new { Id = id });
-            }
-        }
-
-        public async Task<IEnumerable<DeviceReading>> GetAllReadingsAsync()
+        public async Task<IEnumerable<DeviceReading>> GetAllLatestReadingsAsync()
         {
             using (var connection = await _connectionFactory.CreateConnection())
             {
-                var sql = $"SELECT * FROM {DeviceReadingsTableName} AS R INNER JOIN {DevicesTableName} AS D" +
-                          $" ON R.{nameof(DeviceReading.DeviceId)} = D.{nameof(Device.Id)}";
+                var sql = $"SELECT R.{nameof(DeviceReading.DeviceId)}, D.{nameof(Device.Type)}, R.{nameof(DeviceReading.DateTime)}," +
+                    $" R.{nameof(DeviceReading.Speed)}, R.{nameof(DeviceReading.PackageTrackingAlarmState)}," +
+                    " TotalReadings.TotalBoards, TotalReadings.TotalRecipeCount" +
+                    $" FROM {DeviceReadingsTableName} AS R, {DevicesTableName} AS D," +
+                    $" (SELECT {nameof(DeviceReading.DeviceId)}, MAX({nameof(DeviceReading.DateTime)}) AS DateTime FROM {DeviceReadingsTableName}" +
+                    $" GROUP BY {nameof(DeviceReading.DeviceId)}) AS LatestReadings," +
+                    $" (SELECT {nameof(DeviceReading.DeviceId)}, SUM({nameof(DeviceReading.CurrentBoards)}) AS TotalBoards," +
+                    $" SUM({nameof(DeviceReading.CurrentRecipeCount)}) AS TotalRecipeCount" +
+                    $" FROM {DeviceReadingsTableName}" +
+                    $" GROUP BY {nameof(DeviceReading.DeviceId)}) AS TotalReadings" +
+                    $" WHERE LatestReadings.{nameof(DeviceReading.DeviceId)} = R.{nameof(DeviceReading.DeviceId)}" +
+                    $" AND R.{nameof(DeviceReading.DeviceId)} = D.{nameof(Device.Id)}" +
+                    $" AND TotalReadings.{nameof(DeviceReading.DeviceId)} = D.{nameof(Device.Id)}" +
+                    $" AND R.{nameof(DeviceReading.DateTime)} = LatestReadings.DateTime";
 
-                return await connection.QueryAsync<DeviceReading, Device, DeviceReading>(sql,
-                    (reading, device) =>
-                    {
-                        reading.DeviceType = device.Type;
-                        return reading;
-                    }, splitOn: $"{nameof(Device.Type)}");
+                var results = await connection.QueryAsync<dynamic>(sql);
+
+                return results.Select(r => new DeviceReading
+                {
+                    DeviceId = r.DeviceId,
+                    DateTime = r.DateTime,
+                    DeviceType = r.Type,
+                    Speed = r.Speed,
+                    PackageTrackingAlarmState = r.PackageTrackingAlarmState,
+                    TotalBoards = r.TotalBoards,
+                    TotalRecipeCount = r.TotalRecipeCount
+                });
             }
         }
     }

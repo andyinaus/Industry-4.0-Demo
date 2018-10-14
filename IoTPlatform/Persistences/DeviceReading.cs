@@ -17,5 +17,9 @@ namespace IoTPlatform.Persistences
         public int CurrentRecipeCount { get; set; }
 
         public string DeviceType { get; set; }
+
+        public long TotalBoards { get; set; }
+
+        public long TotalRecipeCount { get; set; }
     }
 }

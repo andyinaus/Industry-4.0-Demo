@@ -7,7 +7,6 @@ namespace IoTPlatform.Repositories
     public interface IDeviceReadingRepository
     {
         Task AddAsync(DeviceReading reading);
-        Task<IEnumerable<DeviceReading>> GetAllReadingsByIdAsync(string id);
-        Task<IEnumerable<DeviceReading>> GetAllReadingsAsync();
+        Task<IEnumerable<DeviceReading>> GetAllLatestReadingsAsync();
     }
 }

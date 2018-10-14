@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using IoTPlatform.Models;
@@ -67,50 +66,7 @@ namespace IoTPlatform.Controllers
         }
 
         /// <summary>
-        /// Gets All DeviceReadings With the Given ID.
-        /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     GET /Device
-        ///     {
-        ///        "id": "12345"
-        ///     }
-        ///
-        /// </remarks>
-        /// <param name="id"></param>
-        /// <returns>All device readings with the given id</returns>
-        /// <response code="200">Returns all device readings with the given id</response>
-        /// <response code="400">If the id is invalid</response>  
-        /// <response code="404">If no device readings found with the given id</response>    
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        public async Task<ActionResult<DeviceReadingsModel>> GetAllByIdAsync([Required] string id)
-        {
-            var results = (await _deviceReadingRepository.GetAllReadingsByIdAsync(id)).ToList();
-            if (!results.Any()) return NotFound();
-
-            var readings = results.Select(r => new DeviceReadingsModel.Reading
-            {
-                CurrentRecipeCount = r.CurrentRecipeCount,
-                CurrentBoards = r.CurrentBoards,
-                DateTime = r.DateTime,
-                PackageTrackingAlarmState = r.PackageTrackingAlarmState,
-                Speed = r.Speed
-            }).ToList();
-
-            return new DeviceReadingsModel
-            {
-                Id = results.FirstOrDefault()?.DeviceId,
-                DeviceType = results.FirstOrDefault()?.DeviceType,
-                Readings = readings
-            };
-        }
-
-        /// <summary>
-        /// Gets All DeviceReadings.
+        /// Gets Latest DeviceReadings For All Devices.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -120,39 +76,26 @@ namespace IoTPlatform.Controllers
         ///
         /// </remarks>
         /// <returns>All device readings</returns>
-        /// <response code="200">Returns all device readings</response>
+        /// <response code="200">Returns latest readings for all devices</response>
         /// <response code="404">If no device readings found</response>    
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<IEnumerable<DeviceReadingsModel>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<LatestDeviceReadingModel>>> GetAllLatestAsync()
         {
-            var results = (await _deviceReadingRepository.GetAllReadingsAsync()).ToList();
-            if (!results.Any()) return NotFound();
+            var readings = (await _deviceReadingRepository.GetAllLatestReadingsAsync()).ToList();
+            if (!readings.Any()) return NotFound();
 
-            var deviceReadings = new List<DeviceReadingsModel>();
-
-            var groups = results.GroupBy(g => g.DeviceId);
-            foreach (var group in groups)
+            return readings.Select(r => new LatestDeviceReadingModel
             {
-                var readings = group.Select(g => new DeviceReadingsModel.Reading
-                {
-                    CurrentRecipeCount = g.CurrentRecipeCount,
-                    CurrentBoards = g.CurrentBoards,
-                    DateTime = g.DateTime,
-                    PackageTrackingAlarmState = g.PackageTrackingAlarmState,
-                    Speed = g.Speed
-                });
-
-                deviceReadings.Add(new DeviceReadingsModel
-                {
-                    Id = group.Key,
-                    DeviceType = group.FirstOrDefault()?.DeviceType,
-                    Readings = readings
-                });
-            }
-
-            return deviceReadings;
+                Id = r.DeviceId,
+                DeviceType = r.DeviceType,
+                DateTime = r.DateTime,
+                Speed = r.Speed,
+                PackageTrackingAlarmState = r.PackageTrackingAlarmState,
+                TotalBoards = r.TotalBoards,
+                TotalRecipeCount = r.TotalRecipeCount
+            }).ToList();
         }
     }
 }
