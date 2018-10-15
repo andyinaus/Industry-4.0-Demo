@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
+  "devDependencies": {
+    "bootstrap": "4.0.0",
+    "concat": "^1.0.3",
+    "eslint": "^5.5.0",
+    "font-awesome": "4.7.0",
+    "gulp": "3.9.1",
+    "gulp-concat": "2.6.1",
+    "gulp-cssmin": "0.1.7",
+    "gulp-uglify": "2.0.1",
+    "jquery": "3.3.1",
+    "mocha": "5.2.0",
+    "popper.js": "1.14.4",
+    "rimraf": "2.6.1",
+    "watch": "^1.0.2",
+    "webpack": "4.17.2",
+    "vue":   "2.5.17" 
+  },
+  "scripts": {
+    "lint": "eslint Assets/js/**",
+    "concat:css": "concat -o wwwroot/css/site.css Assets/css/site.css node_modules/bootstrap/dist/css/bootstrap.css",
+    "concat:js": "concat -o wwwroot/js/site.js node_modules/bootstrap/dist/js/bootstrap.js node_modules/jquery/dist/jquery.js",
+    "concat": "concurrently -k \"npm run concat:css\" \"npm run concat:js\"",
+    "watch:css": "watch \"npm run concat:css\" Assets/css",
+    "watch:js": "watch \"npm run concat:js\" Assets/js",
+    "watch": "concurrently -k \"npm run watch:css\" \"npm run watch:js\"",
+    "pretest": "npm run lint",
+    "test": "mocha test",
+    "posttest": "echo the test has been run!",
+    "start": "concurrently -k \"npm run dev\" \"npm run watch\""
+  }
+}
