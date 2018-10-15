@@ -5,6 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\monitor.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\css\site.css" />
+    <Content Include="Assets\css\site.min.css" />
+    <Content Include="Assets\img\Device.svg" />
+    <Content Include="Assets\img\IoT_Home.svg" />
+    <Content Include="Assets\js\monitor.js">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.5" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
@@ -23,5 +37,10 @@
 
   <ItemGroup>
    <None Include="appsettings.json" CopyToPublishDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 </Project>
