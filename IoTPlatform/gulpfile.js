@@ -5,7 +5,8 @@ var gulp = require("gulp"),
     rimraf = require("rimraf"),
     concat = require("gulp-concat"),
     cssmin = require("gulp-cssmin"),
-    uglify = require("gulp-uglify");
+    uglify = require("gulp-uglify"),
+    babel = require("gulp-babel");
 
 var paths = {
     webroot: "./wwwroot/",
@@ -27,6 +28,9 @@ paths.concatCssDest = paths.webroot + "css/site.css";
 paths.concatMinJsDest = paths.webroot + "js/site.min.js";
 paths.concatMinCssDest = paths.webroot + "css/site.min.css";
 
+paths.imgs = paths.assets + "img/*";
+paths.imgDest = paths.webroot + "images";
+
 gulp.task("clean:js", function (cb) {
     rimraf(paths.concatJsDest, cb);
 });
@@ -36,6 +40,15 @@ gulp.task("clean:css", function (cb) {
 });
 
 gulp.task('clean', ['clean:js', 'clean:css']);
+
+gulp.task("clean:img", function(cb) {
+    rimraf(paths.imgDest + "/", cb);
+});
+
+gulp.task("move:img", function() {
+    return gulp.src(paths.imgs)
+        .pipe(gulp.dest(paths.imgDest));
+});
 
 gulp.task("dev:js", function () {
     return gulp.src([paths.jquery, paths.bootstrapJs, paths.vueJs, paths.d3Js, paths.js, "!" + paths.minJs], { base: "." })
@@ -54,6 +67,7 @@ gulp.task('dev', ['dev:js', 'dev:css']);
 gulp.task("min:js", function () {
     return gulp.src([paths.jquery, paths.bootstrapJs, paths.vueJs, paths.d3Js, paths.js, "!" + paths.minJs], { base: "." })
         .pipe(concat(paths.concatMinJsDest))
+        .pipe(babel({ presets: ['es2015'] }))
         .pipe(uglify())
         .pipe(gulp.dest("."));
 });
@@ -69,3 +83,4 @@ gulp.task('min', ['min:js', 'min:css']);
 
 gulp.task('build:dev', ['clean', 'dev']);
 gulp.task('build:prod', ['clean', 'min']);
+gulp.task('img', ['clean:img', 'move:img']);
