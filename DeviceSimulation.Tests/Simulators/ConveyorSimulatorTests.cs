@@ -1,7 +1,6 @@
 ﻿using System;
 using DeviceSimulation.Simulation;
 using DeviceSimulation.Simulation.Options;
-using DeviceSimulation.Utils;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -13,7 +12,7 @@ namespace DeviceSimulation.Tests.Simulators
         [TestMethod]
         public void CtorWhenIdIsNullShouldThrowArgumentNullException()
         {
-            Action target = () => new ConveyorSimulator(null, new Clock(DateTime.Now), Options.Create(new SimulatorSettingsOptions()));
+            Action target = () => new ConveyorSimulator(null, Options.Create(new SimulatorSettingsOptions()));
 
             Assert.ThrowsException<ArgumentNullException>(target);
         }
@@ -21,15 +20,7 @@ namespace DeviceSimulation.Tests.Simulators
         [TestMethod]
         public void CtorWhenIdIsWhiteSpaceShouldThrowArgumentNullException()
         {
-            Action target = () => new ConveyorSimulator(" ", new Clock(DateTime.Now), Options.Create(new SimulatorSettingsOptions()));
-
-            Assert.ThrowsException<ArgumentNullException>(target);
-        }
-
-        [TestMethod]
-        public void CtorWhenClockIsNullShouldThrowArgumentNullException()
-        {
-            Action target = () => new ConveyorSimulator("123", null, Options.Create(new SimulatorSettingsOptions()));
+            Action target = () => new ConveyorSimulator(" ", Options.Create(new SimulatorSettingsOptions()));
 
             Assert.ThrowsException<ArgumentNullException>(target);
         }
@@ -37,13 +28,13 @@ namespace DeviceSimulation.Tests.Simulators
         [TestMethod]
         public void CtorWhenSimulatorOptionsIsNullShouldThrowArgumentNullException()
         {
-            Action target = () => new ConveyorSimulator("1234", new Clock(DateTime.Now), null);
+            Action target = () => new ConveyorSimulator("1234", null);
 
             Assert.ThrowsException<ArgumentNullException>(target);
         }
 
         [TestMethod]
-        public void SimulateWithValidSimulatorOptionsShouldSimulateAccordingly()
+        public void SimulateWithValidSimulatorOptionsShouldReturnSimulationResultAccordingly()
         {
             var options = Options.Create(new SimulatorSettingsOptions
             {
@@ -52,14 +43,14 @@ namespace DeviceSimulation.Tests.Simulators
                 SpeedMin = 5
             });
 
-            var simulator = new ConveyorSimulator("1234", new Clock(DateTime.Now), options);
+            var simulator = new ConveyorSimulator("1234", options);
 
-            simulator.Simulate();
+            var result = simulator.SimulateAt(DateTime.Now);
 
-            Assert.IsTrue(simulator.Speed >= options.Value.SpeedMin);
-            Assert.IsTrue(simulator.Speed <= options.Value.SpeedMax);
-            Assert.IsTrue(simulator.CurrentRecipeCount <= options.Value.MaximumItemsPerSecond);
-            Assert.IsTrue(simulator.CurrentBoards <= options.Value.MaximumItemsPerSecond);
+            Assert.IsTrue(result.Speed >= options.Value.SpeedMin);
+            Assert.IsTrue(result.Speed <= options.Value.SpeedMax);
+            Assert.IsTrue(result.CurrentRecipeCount <= options.Value.MaximumItemsPerSecond);
+            Assert.IsTrue(result.CurrentBoards <= options.Value.MaximumItemsPerSecond);
         }
     }
 }

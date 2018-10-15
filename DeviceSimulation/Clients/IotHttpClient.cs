@@ -27,13 +27,13 @@ namespace DeviceSimulation.Clients
             _client.BaseAddress = new Uri(_ioTOptions.BaseAddress);
         }
         
-        public async Task<HttpResponseMessage> SendSimulatedDeviceDataAsync(ConveyorSimulator simulator)
+        public async Task<HttpResponseMessage> SendSimulatedDeviceDataAsync(ConveyorSimulator.SimulationResult result)
         {
-            if (simulator == null) throw new ArgumentNullException(nameof(simulator));
+            if (result == null) throw new ArgumentNullException(nameof(result));
 
             HttpResponseMessage response = null;
 
-            var content = new StringContent(JsonConvert.SerializeObject(simulator), Encoding.UTF8,
+            var content = new StringContent(JsonConvert.SerializeObject(result), Encoding.UTF8,
                 "application/json");
 
             for (var i = 0; i <= _httpOptions.NumberOfRetries; i++)
@@ -43,14 +43,14 @@ namespace DeviceSimulation.Clients
                     response = await _client.PostAsync(_ioTOptions.RelativeSendingDataUrl, content);
 
                     response.EnsureSuccessStatusCode();
-                    Console.WriteLine($"Successfully sent for device {simulator.Id} with speed {simulator.Speed}.");
+                    Console.WriteLine($"Successfully sent for device {result.Id} with speed {result.Speed}.");
                     break;
                 }
                 catch (HttpRequestException exception)
                 {
                     if (i == _httpOptions.NumberOfRetries)
                     {
-                        _logger.Warning($"Error at Device {simulator.Id}: {exception.Message}");
+                        _logger.Warning($"Error at Device {result.Id}: {exception.Message}");
                     }
                     else
                     {

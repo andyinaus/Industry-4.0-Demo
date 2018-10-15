@@ -75,15 +75,19 @@ namespace DeviceSimulation
             var factory = serviceProvider.GetService<ISimulatorFactory>();
             var requiredDeviceIds = serviceProvider.GetService<IOptions<RequiredSimulatorsOptions>>()
                 .Value.Simulators.Select(s => s.DeviceId);
-            var requiredSimulators = requiredDeviceIds.Select(
-                s => factory.CreateSimulator(s));
+            var requiredSimulators = requiredDeviceIds.Select(s => factory.CreateSimulator(s));
 
             var timer = new Timer(1000);
-            timer.Elapsed += async (sender, eventArgs) =>
+            timer.Elapsed += (sender, eventArgs) =>
             {
-                requiredSimulators = requiredSimulators.Select(s => s.Simulate());
-                var tasks = requiredSimulators.Select(s => client.SendSimulatedDeviceDataAsync(s));
-                await Task.WhenAll(tasks);
+                var now = DateTime.Now;
+                var tasks = requiredSimulators.Select(r => new Task(async () =>
+                {
+                    var result = r.SimulateAt(now);
+                    await client.SendSimulatedDeviceDataAsync(result);
+                }));
+                
+                Task.WhenAll(tasks);
             };
 
             Console.WriteLine("Start Simulating ...");

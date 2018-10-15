@@ -7,7 +7,6 @@ using DeviceSimulation.Clients;
 using DeviceSimulation.Clients.Options;
 using DeviceSimulation.Simulation;
 using DeviceSimulation.Simulation.Options;
-using DeviceSimulation.Utils;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -101,9 +100,10 @@ namespace DeviceSimulation.Tests.Clients
             _ioTPlatformOptions.Value.RelativeSendingDataUrl = "/test/123";
 
             var client = new IoTHttpClient(_ioTPlatformOptions, _httpOptions, _logger, _client);
-            var simulator = new ConveyorSimulator("123", new Clock(DateTime.Now), CreateDummySimulatorSettingsOptions());
+            var simulator = new ConveyorSimulator("123", CreateDummySimulatorSettingsOptions());
+            var result = simulator.SimulateAt(DateTime.Now);
 
-            client.SendSimulatedDeviceDataAsync(simulator).Wait();
+            client.SendSimulatedDeviceDataAsync(result).Wait();
 
             var expectedDestination = new Uri($"{_ioTPlatformOptions.Value.BaseAddress}{_ioTPlatformOptions.Value.RelativeSendingDataUrl}");
 
@@ -122,9 +122,10 @@ namespace DeviceSimulation.Tests.Clients
             _httpOptions.Value.NumberOfRetries = 5;
 
             var client = new IoTHttpClient(_ioTPlatformOptions, _httpOptions, _logger, _client);
-            var simulator = new ConveyorSimulator("123", new Clock(DateTime.Now), CreateDummySimulatorSettingsOptions());
+            var simulator = new ConveyorSimulator("123", CreateDummySimulatorSettingsOptions());
+            var result = simulator.SimulateAt(DateTime.Now);
 
-            client.SendSimulatedDeviceDataAsync(simulator).Wait();
+            client.SendSimulatedDeviceDataAsync(result).Wait();
 
             _httpMessageHandlerMock.Protected().Verify("SendAsync", Times.Exactly(6),
                 ItExpr.IsAny<HttpRequestMessage>(),
