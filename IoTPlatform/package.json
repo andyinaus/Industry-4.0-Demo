@@ -23,7 +23,7 @@
   "scripts": {
     "lint": "eslint Assets/js/**",
     "concat:css": "concat -o wwwroot/css/site.css Assets/css/site.css node_modules/bootstrap/dist/css/bootstrap.css",
-    "concat:js": "concat -o wwwroot/js/site.js node_modules/vue/dist/vue.js node_modules/bootstrap/dist/js/bootstrap.js node_modules/jquery/dist/jquery.js",
+    "concat:js": "concat -o node_modules/jquery/dist/jquery.js node_modules/bootstrap/dist/js/bootstrap.js node_modules/vue/dist/vue.js node_modules/d3/dist/d3.js wwwroot/js/site.js",
     "concat": "concurrently -k \"npm run concat:css\" \"npm run concat:js\"",
     "watch:css": "watch \"npm run concat:css\" Assets/css",
     "watch:js": "watch \"npm run concat:js\" Assets/js",

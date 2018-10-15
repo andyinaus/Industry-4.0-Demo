@@ -16,7 +16,7 @@ var paths = {
 paths.js = paths.assets + "js/*.js";
 paths.bootstrapJs = paths.node_modules + 'bootstrap/dist/js/bootstrap.js';
 paths.vueJs = paths.node_modules + 'vue/dist/vue.js';
-paths.jquery = paths.node_modules + 'jquery/dist/jquery.js';
+paths.d3Js = paths.node_modules + 'd3/dist/d3.js';
 paths.jquery = paths.node_modules + 'jquery/dist/jquery.js';
 paths.minJs = paths.webroot + "js/**/*.min.js";
 paths.css = paths.assets + "css/*.css";
@@ -38,7 +38,7 @@ gulp.task("clean:css", function (cb) {
 gulp.task('clean', ['clean:js', 'clean:css']);
 
 gulp.task("dev:js", function () {
-    return gulp.src([paths.js, paths.bootstrapJs, paths.vueJs, paths.jquery, "!" + paths.minJs], { base: "." })
+    return gulp.src([paths.jquery, paths.bootstrapJs, paths.vueJs, paths.d3Js, paths.js, "!" + paths.minJs], { base: "." })
         .pipe(concat(paths.concatJsDest))
         .pipe(gulp.dest("."));
 });
@@ -52,7 +52,7 @@ gulp.task("dev:css", function () {
 gulp.task('dev', ['dev:js', 'dev:css']);
 
 gulp.task("min:js", function () {
-    return gulp.src([paths.js, paths.bootstrapJs, paths.vueJs, paths.jquery, "!" + paths.minJs], { base: "." })
+    return gulp.src([paths.jquery, paths.bootstrapJs, paths.vueJs, paths.d3Js, paths.js, "!" + paths.minJs], { base: "." })
         .pipe(concat(paths.concatMinJsDest))
         .pipe(uglify())
         .pipe(gulp.dest("."));
