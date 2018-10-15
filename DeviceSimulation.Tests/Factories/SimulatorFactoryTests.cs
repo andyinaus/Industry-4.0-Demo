@@ -1,6 +1,6 @@
 ﻿using System;
 using DeviceSimulation.Factories;
-using DeviceSimulation.Simulators.Options;
+using DeviceSimulation.Simulation.Options;
 using DeviceSimulation.Utils;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

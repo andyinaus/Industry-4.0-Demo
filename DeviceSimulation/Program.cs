@@ -7,7 +7,7 @@ using System.Timers;
 using DeviceSimulation.Clients;
 using DeviceSimulation.Clients.Options;
 using DeviceSimulation.Factories;
-using DeviceSimulation.Simulators.Options;
+using DeviceSimulation.Simulation.Options;
 using DeviceSimulation.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

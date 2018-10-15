@@ -1,4 +1,4 @@
-﻿namespace DeviceSimulation.Simulators.Options
+﻿namespace DeviceSimulation.Simulation.Options
 {
     public class SimulatorSettingsOptions
     {

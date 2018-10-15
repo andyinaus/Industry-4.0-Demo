@@ -1,9 +1,9 @@
 ﻿using System;
-using DeviceSimulation.Simulators.Options;
+using DeviceSimulation.Simulation.Options;
 using DeviceSimulation.Utils;
 using Microsoft.Extensions.Options;
 
-namespace DeviceSimulation.Simulators
+namespace DeviceSimulation.Simulation
 {
     public class ConveyorSimulator
     {

@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using DeviceSimulation.Clients.Options;
-using DeviceSimulation.Simulators;
+using DeviceSimulation.Simulation;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Serilog;

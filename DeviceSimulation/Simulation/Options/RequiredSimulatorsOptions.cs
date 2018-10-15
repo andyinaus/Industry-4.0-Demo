@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DeviceSimulation.Simulators.Options
+namespace DeviceSimulation.Simulation.Options
 {
     public class RequiredSimulatorsOptions
     {

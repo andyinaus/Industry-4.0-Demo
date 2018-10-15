@@ -1,4 +1,4 @@
-﻿using DeviceSimulation.Simulators;
+﻿using DeviceSimulation.Simulation;
 
 namespace DeviceSimulation.Factories
 {

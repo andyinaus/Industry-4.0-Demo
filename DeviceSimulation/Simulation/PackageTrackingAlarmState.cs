@@ -1,4 +1,4 @@
-﻿namespace DeviceSimulation.Simulators
+﻿namespace DeviceSimulation.Simulation
 {
     public enum PackageTrackingAlarmState
     {
