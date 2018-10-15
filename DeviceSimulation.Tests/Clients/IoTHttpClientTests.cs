@@ -83,7 +83,7 @@ namespace DeviceSimulation.Tests.Clients
         }
 
         [TestMethod]
-        public void SendSimulatedDeviceDataAsyncWhenSimulatorIsNullShouldThrowArgumentNullException()
+        public void SendSimulatedDeviceDataAsyncWhenResultIsNullShouldThrowArgumentNullException()
         {
             var client = new IoTHttpClient(_ioTPlatformOptions, _httpOptions, _logger, _client);
 
