@@ -3,7 +3,7 @@
   "name": "asp.net",
   "private": true,
   "devDependencies": {
-    "bootstrap": "4.0.0",
+    "bootstrap": "3.3.7",
     "concat": "^1.0.3",
     "eslint": "^5.5.0",
     "font-awesome": "4.7.0",
@@ -17,12 +17,13 @@
     "rimraf": "2.6.1",
     "watch": "^1.0.2",
     "webpack": "4.17.2",
-    "vue":   "2.5.17" 
+    "vue": "2.5.17",
+    "d3": "5.7.0"
   },
   "scripts": {
     "lint": "eslint Assets/js/**",
     "concat:css": "concat -o wwwroot/css/site.css Assets/css/site.css node_modules/bootstrap/dist/css/bootstrap.css",
-    "concat:js": "concat -o wwwroot/js/site.js node_modules/bootstrap/dist/js/bootstrap.js node_modules/jquery/dist/jquery.js",
+    "concat:js": "concat -o wwwroot/js/site.js node_modules/vue/dist/vue.js node_modules/bootstrap/dist/js/bootstrap.js node_modules/jquery/dist/jquery.js",
     "concat": "concurrently -k \"npm run concat:css\" \"npm run concat:js\"",
     "watch:css": "watch \"npm run concat:css\" Assets/css",
     "watch:js": "watch \"npm run concat:js\" Assets/js",
