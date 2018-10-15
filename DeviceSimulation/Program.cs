@@ -8,7 +8,6 @@ using DeviceSimulation.Clients;
 using DeviceSimulation.Clients.Options;
 using DeviceSimulation.Factories;
 using DeviceSimulation.Simulation.Options;
-using DeviceSimulation.Utils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -53,7 +52,6 @@ namespace DeviceSimulation
 
             services.AddSingleton(new HttpClient());
             services.AddSingleton<IoTHttpClient>();
-            services.AddSingleton<IClock>(new Clock(DateTime.Now));
             services.AddSingleton<ISimulatorFactory, SimulatorFactory>();
         }
 
@@ -81,13 +79,12 @@ namespace DeviceSimulation
             timer.Elapsed += (sender, eventArgs) =>
             {
                 var now = DateTime.Now;
-                var tasks = requiredSimulators.Select(r => new Task(async () =>
+
+                Parallel.ForEach(requiredSimulators, async simulator =>
                 {
-                    var result = r.SimulateAt(now);
+                    var result = simulator.SimulateAt(now);
                     await client.SendSimulatedDeviceDataAsync(result);
-                }));
-                
-                Task.WhenAll(tasks);
+                });
             };
 
             Console.WriteLine("Start Simulating ...");
