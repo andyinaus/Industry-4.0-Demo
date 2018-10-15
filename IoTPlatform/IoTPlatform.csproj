@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Device\Register.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.5" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
@@ -26,15 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Device\Register.cshtml" />
+   <None Include="appsettings.json" CopyToPublishDirectory="Always" />
   </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Device\Register.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Device\Register.cshtml" />
-  </ItemGroup>
-
 </Project>
