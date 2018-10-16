@@ -24,48 +24,6 @@ namespace IoTPlatform.Controllers
         }
 
         /// <summary>
-        /// Create a DeviceReading.
-        /// </summary>
-        /// <remarks>
-        /// Sample request:
-        ///
-        ///     POST /DeviceReading
-        ///     {
-        ///        "Id": "1234",
-        ///        "DateTime": "2018/10/10 P.M. 01:02:01",
-        ///        "PackageTrackingAlarmState": "Okay",
-        ///        "Speed": 3,
-        ///        "CurrentRecipeCount": 3,
-        ///        "CurrentBoards": 3
-        ///     }
-        ///
-        /// </remarks>
-        /// <param name="reading"></param>
-        /// <returns>A newly created device reading</returns>
-        /// <response code="201">Returns the newly created device reading</response>
-        /// <response code="400">If the reading is null or reading.Id does not exist</response>           
-        [HttpPost]
-        [ProducesResponseType(201)]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult<JsonResult>> CreateAsync(DeviceReadingModel reading)
-        {
-            if (await _deviceRepository.GetByIdAsync(reading.Id) == null)
-                return BadRequest(new {Error = $"No Device found with the given Id '{reading.Id}'."});
-
-            await _deviceReadingRepository.AddAsync(new DeviceReading
-            {
-                DeviceId = reading.Id,
-                DateTime = reading.DateTime,
-                Speed = reading.Speed,
-                PackageTrackingAlarmState = reading.PackageTrackingAlarmState,
-                CurrentBoards = reading.CurrentBoards,
-                CurrentRecipeCount = reading.CurrentRecipeCount
-            });
-
-            return Created(string.Empty, reading);
-        }
-
-        /// <summary>
         /// Gets Latest DeviceReadings For All Devices.
         /// </summary>
         /// <remarks>
