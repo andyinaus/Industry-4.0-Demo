@@ -26,7 +26,7 @@ namespace IoTPlatform.Repositories
         {
             if (reading == null) throw new ArgumentNullException(nameof(reading));
 
-            using (var connection = await _connectionFactory.CreateConnection())
+            using (var connection = await _connectionFactory.CreateConnectionAsync())
             {
                 var sql = $"INSERT INTO {DeviceReadingsTableName} ({nameof(DeviceReading.DeviceId)}, {nameof(DeviceReading.DateTime)}, {nameof(DeviceReading.Speed)}," +
                           $" {nameof(DeviceReading.PackageTrackingAlarmState)}, {nameof(DeviceReading.CurrentBoards)}, {nameof(DeviceReading.CurrentRecipeCount)})"
@@ -41,7 +41,7 @@ namespace IoTPlatform.Repositories
 
         public async Task<IEnumerable<DeviceReading>> GetAllLatestReadingsAsync()
         {
-            using (var connection = await _connectionFactory.CreateConnection())
+            using (var connection = await _connectionFactory.CreateConnectionAsync())
             {
                 var sql = $"SELECT R.{nameof(DeviceReading.DeviceId)}, D.{nameof(Device.Type)}, R.{nameof(DeviceReading.DateTime)}," +
                     $" R.{nameof(DeviceReading.Speed)}, R.{nameof(DeviceReading.PackageTrackingAlarmState)}," +

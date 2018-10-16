@@ -18,7 +18,7 @@ namespace Industry.Simulation.Core.Infrastructures
             _connectionString = configuration.GetConnectionString(ConnectionStringSectionName);
         }
 
-        public async Task<IDbConnection> CreateConnection()
+        public async Task<IDbConnection> CreateConnectionAsync()
         {
             var sqlConnection = new SqlConnection(_connectionString);
             await sqlConnection.OpenAsync();

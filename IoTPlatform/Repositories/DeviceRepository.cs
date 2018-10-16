@@ -23,7 +23,7 @@ namespace IoTPlatform.Repositories
         {
             if (device == null) throw new ArgumentNullException(nameof(device));
 
-            using (var connection = await _connectionFactory.CreateConnection())
+            using (var connection = await _connectionFactory.CreateConnectionAsync())
             {
                 var sql = $"INSERT INTO {TableName} (ID, Type)"
                     + " VALUES(@Id, @Type)";
@@ -40,7 +40,7 @@ namespace IoTPlatform.Repositories
         {
             if (string.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
 
-            using (var connection = await _connectionFactory.CreateConnection())
+            using (var connection = await _connectionFactory.CreateConnectionAsync())
             {
                 var sql = $"SELECT * FROM {TableName}"
                           + " WHERE Id = @Id";
@@ -53,7 +53,7 @@ namespace IoTPlatform.Repositories
 
         public async Task<IEnumerable<Device>> GetAllAsync()
         {
-            using (var connection = await _connectionFactory.CreateConnection())
+            using (var connection = await _connectionFactory.CreateConnectionAsync())
             {
                 var sql = $"SELECT * FROM {TableName}";
 

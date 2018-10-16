@@ -5,6 +5,6 @@ namespace Industry.Simulation.Core.Infrastructures
 {
     public interface IConnectionFactory
     {
-        Task<IDbConnection> CreateConnection();
+        Task<IDbConnection> CreateConnectionAsync();
     }
 }
