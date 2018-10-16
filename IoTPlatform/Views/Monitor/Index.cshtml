@@ -14,7 +14,10 @@
                 <p>Type: {{reading.deviceType}}</p>
                 <p>DateTime: {{reading.dateTime}}</p>
                 <p>Speed: {{reading.speed}}</p>
-                <p>Package Tracking Alarm State: {{reading.packageTrackingAlarmState}}</p>
+                <p>Tracking Alarm State: 
+                    <span v-if="reading.packageTrackingAlarmState == 1" class="label label-success">Okay</span>
+                    <span v-else class="label label-danger">Dropped</span>
+                </p>
                 <p>Total Boards: {{reading.totalBoards}}</p>
                 <p>Recipe Count: {{reading.totalRecipeCount}}</p>
             </div>
