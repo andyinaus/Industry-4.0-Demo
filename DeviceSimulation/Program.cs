@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
+using DeviceSimulation.Database;
 using DeviceSimulation.Factories;
 using DeviceSimulation.Simulation.Options;
 using Industry.Simulation.Core.Infrastructures;
@@ -50,6 +51,7 @@ namespace DeviceSimulation
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<ISimulatorFactory, SimulatorFactory>();
             services.AddSingleton<IConnectionFactory, ConnectionFactory>();
+            services.AddSingleton<IDatabaseWriter, DatabaseWriter>();
         }
 
         public static void Main(string[] args)
@@ -69,6 +71,8 @@ namespace DeviceSimulation
             var requiredDeviceIds = serviceProvider.GetService<IOptions<RequiredSimulatorsOptions>>()
                 .Value.Simulators.Select(s => s.DeviceId);
             var requiredSimulators = requiredDeviceIds.Select(s => simulatorFactory.CreateSimulator(s));
+            var writer = serviceProvider.GetService<IDatabaseWriter>();
+
             var timer = new Timer(1000);
             timer.Elapsed += (sender, eventArgs) =>
             {
@@ -77,6 +81,7 @@ namespace DeviceSimulation
                 Parallel.ForEach(requiredSimulators, async simulator =>
                 {
                     var result = simulator.SimulateAt(now);
+                    await writer.WriteAsync(result);
                 });
             };
 
