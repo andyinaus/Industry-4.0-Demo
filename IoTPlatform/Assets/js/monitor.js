@@ -231,9 +231,7 @@ if (document.getElementById("Monitor")) {
                 xAxisSection.append("text")
                     .attr("dx", "-1.5em")
                     .attr("color", "white")
-                    .attr("x", svgSettings.width)
-                    .attr("y", -5)
-                    .text("Device");
+                    .attr("x", svgSettings.width);
 
                 // y axis
                 var yScale = d3.scaleLinear()
@@ -288,7 +286,8 @@ if (document.getElementById("Monitor")) {
                     }));
 
                     yScale.domain([0, d3.max(newDataSet, (d) => d.boards)]);
-                    yAxis.scale(yScale);
+                    yAxis.scale(yScale)
+                        .ticks(20, "s");
                     yAxisSection
 						.transition()
                         .duration(transitionSettings.duration)
