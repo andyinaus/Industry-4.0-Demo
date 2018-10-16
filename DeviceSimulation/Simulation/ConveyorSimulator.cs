@@ -19,8 +19,8 @@ namespace DeviceSimulation.Simulation
 
         public SimulationResult SimulateAt(DateTime dateTime)
         {
-            
             var random = new Random();
+
             return new SimulationResult
             {
                 Id = Id,
