@@ -4,10 +4,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Timers;
-using DeviceSimulation.Clients;
-using DeviceSimulation.Clients.Options;
 using DeviceSimulation.Factories;
 using DeviceSimulation.Simulation.Options;
+using Industry.Simulation.Core.Infrastructures;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -19,8 +18,6 @@ namespace DeviceSimulation
     {
         private static readonly IConfigurationRoot Configuration = BuildConfiguration();
 
-        private const string IoTPlatformSectionName = "IoTPlatform";
-        private const string HttpClientSectionName = "HttpClient";
         private const string SimulatorSettingsSectionName = "SimulatorSettings";
         private const string RequiredSimulatorsSectionName = "RequiredSimulators";
 
@@ -28,7 +25,8 @@ namespace DeviceSimulation
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
 
             return builder.Build();
         }
@@ -43,16 +41,15 @@ namespace DeviceSimulation
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<IoTPlatformOptions>(Configuration.GetSection(IoTPlatformSectionName));
-            services.Configure<HttpClientOptions>(Configuration.GetSection(HttpClientSectionName));
             services.Configure<SimulatorSettingsOptions>(Configuration.GetSection(SimulatorSettingsSectionName));
             services.Configure<RequiredSimulatorsOptions>(Configuration.GetSection(RequiredSimulatorsSectionName));
 
             services.AddSingleton(BuildLogger());
 
             services.AddSingleton(new HttpClient());
-            services.AddSingleton<IoTHttpClient>();
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton<ISimulatorFactory, SimulatorFactory>();
+            services.AddSingleton<IConnectionFactory, ConnectionFactory>();
         }
 
         public static void Main(string[] args)
@@ -68,13 +65,10 @@ namespace DeviceSimulation
 
             Console.WriteLine("Preparing simulation ...");
 
-            var client = serviceProvider.GetService<IoTHttpClient>();
-
-            var factory = serviceProvider.GetService<ISimulatorFactory>();
+            var simulatorFactory = serviceProvider.GetService<ISimulatorFactory>();
             var requiredDeviceIds = serviceProvider.GetService<IOptions<RequiredSimulatorsOptions>>()
                 .Value.Simulators.Select(s => s.DeviceId);
-            var requiredSimulators = requiredDeviceIds.Select(s => factory.CreateSimulator(s));
-
+            var requiredSimulators = requiredDeviceIds.Select(s => simulatorFactory.CreateSimulator(s));
             var timer = new Timer(1000);
             timer.Elapsed += (sender, eventArgs) =>
             {
@@ -83,7 +77,6 @@ namespace DeviceSimulation
                 Parallel.ForEach(requiredSimulators, async simulator =>
                 {
                     var result = simulator.SimulateAt(now);
-                    await client.SendSimulatedDeviceDataAsync(result);
                 });
             };
 
