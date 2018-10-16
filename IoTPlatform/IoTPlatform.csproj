@@ -43,4 +43,8 @@
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Industry.Simulation.Core\Industry.Simulation.Core.csproj" />
+  </ItemGroup>
 </Project>

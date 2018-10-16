@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using IoTPlatform.Infrastructures;
+using Industry.Simulation.Core.Infrastructures;
 using IoTPlatform.Persistences;
 using Serilog;
 

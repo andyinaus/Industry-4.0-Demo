@@ -1,4 +1,4 @@
-﻿using IoTPlatform.Infrastructures;
+﻿using Industry.Simulation.Core.Infrastructures;
 using IoTPlatform.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
