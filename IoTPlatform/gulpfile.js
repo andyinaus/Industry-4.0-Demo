@@ -16,9 +16,13 @@ var paths = {
 
 paths.js = paths.assets + "js/*.js";
 paths.bootstrapJs = paths.node_modules + 'bootstrap/dist/js/bootstrap.js';
+paths.minBootstrapJs = paths.node_modules + 'bootstrap/dist/js/bootstrap.min.js';
 paths.vueJs = paths.node_modules + 'vue/dist/vue.js';
+paths.minVueJs = paths.node_modules + 'vue/dist/vue.min.js';
 paths.d3Js = paths.node_modules + 'd3/dist/d3.js';
+paths.minD3Js = paths.node_modules + 'd3/dist/d3.min.js';
 paths.jquery = paths.node_modules + 'jquery/dist/jquery.js';
+paths.minJquery = paths.node_modules + 'jquery/dist/jquery.min.js';
 paths.minJs = paths.webroot + "js/**/*.min.js";
 paths.css = paths.assets + "css/*.css";
 paths.bootstrapCss = paths.node_modules + "bootstrap/dist/css/bootstrap.css";
@@ -65,10 +69,16 @@ gulp.task("dev:css", function () {
 gulp.task('dev', ['dev:js', 'dev:css']);
 
 gulp.task("min:js", function () {
-    return gulp.src([paths.jquery, paths.bootstrapJs, paths.vueJs, paths.d3Js, paths.js, "!" + paths.minJs], { base: "." })
+    return gulp.src([paths.js, "!" + paths.minJs], { base: "." })
         .pipe(concat(paths.concatMinJsDest))
         .pipe(babel({ presets: ['es2015'] }))
         .pipe(uglify())
+        .pipe(gulp.dest("."));
+});
+
+gulp.task("concate:min:js", function () {
+    return gulp.src([paths.minJquery, paths.minBootstrapJs, paths.minVueJs, paths.minD3Js, paths.concatMinJsDest], { base: "." })
+        .pipe(concat(paths.concatMinJsDest))
         .pipe(gulp.dest("."));
 });
 
@@ -79,7 +89,7 @@ gulp.task("min:css", function () {
         .pipe(gulp.dest("."));
 });
 
-gulp.task('min', ['min:js', 'min:css']);
+gulp.task('min', ['min:js', 'concate:min:js', 'min:css']);
 
 gulp.task('build:dev', ['clean', 'dev']);
 gulp.task('build:prod', ['clean', 'min']);
