@@ -26,8 +26,8 @@ namespace IoTPlatform
                 c.SwaggerDoc("v1", new Info { Title = "IoT Platform API", Version = "v1" });
             });
             services.AddSingleton<IConnectionFactory, ConnectionFactory>();
-            services.AddTransient<IDeviceRepository, DeviceRepository>();
-            services.AddTransient<IDeviceReadingRepository, DeviceReadingRepository>();
+            services.AddScoped<IDeviceRepository, DeviceRepository>();
+            services.AddScoped<IDeviceReadingRepository, DeviceReadingRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
