@@ -1,4 +1,24 @@
 ﻿// Write your JavaScript code.
+
+Number.prototype.padLeft = function (base, chr) {
+    var len = (String(base || 10).length - String(this).length) + 1;
+    return len > 0 ? new Array(len).join(chr || '0') + this : this;
+}
+
+Date.prototype.toFormattedString = function() {
+    return [
+            (this.getMonth() + 1).padLeft(),
+            this.getDate().padLeft(),
+            this.getFullYear()
+        ].join('/') +
+        ' ' +
+        [
+            this.getHours().padLeft(),
+            this.getMinutes().padLeft(),
+            this.getSeconds().padLeft()
+        ].join(':');
+}
+
 if (document.getElementById("Monitor")) {
     var monitorVue = new Vue({
         el: '#Monitor',
@@ -31,12 +51,14 @@ if (document.getElementById("Monitor")) {
                     url: 'api/DeviceReading/',
                     method: 'GET',
                     success: function(data) {
-                        self.latestReadings = data;
+                        self.latestReadings = data.map((d) => {
+                            return Object.assign(d, { dateTime: new Date(d.dateTime).toFormattedString() });
+                        });
 
                         if (!self.speedTrendSvg.value) {
                             self.speedTrendSvg.value = self.getSpeedTrendSvg();
                         } else {
-                            self.speedTrendSvg.value.update(data);
+                            self.speedTrendSvg.value.update(self.latestReadings);
                         }
                         if (!self.legend.value) {
                             self.legend.value = self.getLegend();
@@ -44,7 +66,7 @@ if (document.getElementById("Monitor")) {
                         if (!self.totalBoardSvg.value) {
                             self.totalBoardSvg.value = self.getTotalBoardBarChartSvg();
                         } else {
-                            self.totalBoardSvg.value.update(data);
+                            self.totalBoardSvg.value.update(self.latestReadings);
                         }
                     },
                     error: function(error) {
