@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Threading.Tasks;
 
-namespace IoTPlatform.Infrastructures
+namespace Industry.Simulation.Core.Infrastructures
 {
     public interface IConnectionFactory
     {

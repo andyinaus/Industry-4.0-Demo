@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 
-namespace IoTPlatform.Infrastructures
+namespace Industry.Simulation.Core.Infrastructures
 {
     public class ConnectionFactory : IConnectionFactory
     {
