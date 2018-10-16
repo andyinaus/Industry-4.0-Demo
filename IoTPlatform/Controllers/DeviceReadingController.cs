@@ -48,7 +48,7 @@ namespace IoTPlatform.Controllers
             {
                 Id = r.DeviceId,
                 DeviceType = r.DeviceType,
-                DateTime = r.DateTime,
+                DateTime = DateTime.SpecifyKind(r.DateTime, DateTimeKind.Utc),
                 Speed = r.Speed,
                 PackageTrackingAlarmState = r.PackageTrackingAlarmState,
                 TotalBoards = r.TotalBoards,

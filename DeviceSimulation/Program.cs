@@ -76,7 +76,7 @@ namespace DeviceSimulation
             var timer = new Timer(1000);
             timer.Elapsed += (sender, eventArgs) =>
             {
-                var now = DateTime.Now;
+                var now = DateTime.UtcNow;
 
                 Parallel.ForEach(requiredSimulators, async simulator =>
                 {
