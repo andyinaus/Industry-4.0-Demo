@@ -128,9 +128,17 @@ if (document.getElementById("Monitor")) {
                     .x(function (d) { return xScale(new Date(d.dateTime)); })
                     .y(function (d) { return yScale(d.speed); });
 
+                svgSettings.container
+                    .append("defs")
+                    .append("clipPath")
+                    .attr("id", "clip")
+                    .append("rect")
+                    .attr("width", svgSettings.width)
+                    .attr("height", svgSettings.height);
+
                 var paths = svgSettings.container
-                    .append("svg")
-                    .append("g");
+                    .append("g")
+                    .attr("clip-path", "url(#clip)");
 
                 var svgDict = this.speedTrendSvg.dict;
                 var self = this;
@@ -174,12 +182,13 @@ if (document.getElementById("Monitor")) {
                         .ease(transitionSettings.ease)
                         .call(xAxis);
 
-                    //// Slide paths left
-                    paths.attr('transform', null)
-                        .transition()
-                        .duration(transitionSettings.duration)
-                        .ease(transitionSettings.ease)
-                        .attr('transform', 'translate(' + xScale(now - (maximumDataLength - 1) * transitionSettings.duration) + ')');
+                    /* Todo:Transition not working properly, need to find a way to constraint the size of the paths, so it does not resize */
+                    // Slide paths left
+                    //paths.attr('transform', null)
+                    //    .transition()
+                    //    .duration(transitionSettings.duration)
+                    //    .ease(transitionSettings.ease)
+                    //    .attr('transform', 'translate(' + xScale(now - (maximumDataLength - 1) * transitionSettings.duration) + ')');
                 };
 
                 return lineChart;
