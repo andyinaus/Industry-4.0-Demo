@@ -1,5 +1,3 @@
-using System;
-
 namespace IoTPlatform.Models
 {
     public class ErrorViewModel
