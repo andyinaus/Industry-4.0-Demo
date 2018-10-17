@@ -1,6 +1,8 @@
-# Project Title
+# Industry 4.0 Demo
 
-Industry 4.0 - IoT Platform & Device Simulator
+This project consists of two parts:
+1. An IoT Platform
+2. Device Simulator
 
 ## Getting Started
 
