@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IoTPlatform.Models;
-using IoTPlatform.Persistences;
 using IoTPlatform.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,12 +14,10 @@ namespace IoTPlatform.Controllers
     public class DeviceReadingController : ControllerBase
     {
         private readonly IDeviceReadingRepository _deviceReadingRepository;
-        private readonly IDeviceRepository _deviceRepository;
 
-        public DeviceReadingController(IDeviceReadingRepository deviceReadingRepository, IDeviceRepository deviceRepository)
+        public DeviceReadingController(IDeviceReadingRepository deviceReadingRepository)
         {
             _deviceReadingRepository = deviceReadingRepository ?? throw new ArgumentNullException(nameof(deviceReadingRepository));
-            _deviceRepository = deviceRepository ?? throw new ArgumentNullException(nameof(deviceRepository));
         }
 
         /// <summary>
