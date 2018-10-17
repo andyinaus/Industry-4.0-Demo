@@ -34,7 +34,7 @@ namespace DeviceSimulation.Tests.Simulators
         }
 
         [TestMethod]
-        public void SimulateWithValidSimulatorOptionsShouldReturnSimulationResultAccordingly()
+        public void SimulateAtWithValidSimulatorOptionsShouldReturnSimulationResultAccordingly()
         {
             var options = Options.Create(new SimulatorSettingsOptions
             {
