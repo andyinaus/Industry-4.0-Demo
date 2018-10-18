@@ -55,26 +55,31 @@ if (document.getElementById("Monitor")) {
                             return Object.assign(d, { dateTime: new Date(d.dateTime).toFormattedString() });
                         });
 
-                        if (!self.speedTrendSvg.value) {
-                            self.speedTrendSvg.value = self.getSpeedTrendSvg();
-                        } else {
-                            self.speedTrendSvg.value.update(self.latestReadings);
-                        }
-                        if (!self.legend.value) {
-                            self.legend.value = self.getLegend();
-                        }
-                        if (!self.totalBoardSvg.value) {
-                            self.totalBoardSvg.value = self.getTotalBoardBarChartSvg();
-                        } else {
-                            self.totalBoardSvg.value.update(self.latestReadings);
-                        }
+                        self.renderCharts();
                     },
                     error: function(error) {
                         console.log(error);
                     }
                 });
             },
-            updateDictForSpeedTrendSvg(data) {
+            renderCharts() {
+                if (!this.speedTrendSvg.value) {
+                    this.speedTrendSvg.value = this.getSpeedTrendSvg();
+                    this.speedTrendSvg.value.update(this.latestReadings);
+                } else {
+                    this.speedTrendSvg.value.update(this.latestReadings);
+                }
+                if (!this.legend.value) {
+                    this.legend.value = this.getLegend();
+                }
+                if (!this.totalBoardSvg.value) {
+                    this.totalBoardSvg.value = this.getTotalBoardBarChartSvg();
+                    this.totalBoardSvg.value.update(this.latestReadings);
+                } else {
+                    this.totalBoardSvg.value.update(this.latestReadings);
+                }
+            },
+            updateDictForSpeedTrendSvg(data, maximumDataLength) {
                 for (var i = 0; i < data.length; i++) {
                     var current = data[i];
                     var reading = {
@@ -88,6 +93,9 @@ if (document.getElementById("Monitor")) {
                         };
                     } else {
                         dataAssociatedWithCurrentId.readings.push(reading);
+                        if (dataAssociatedWithCurrentId.readings > maximumDataLength) {
+                            dataAssociatedWithCurrentId.readings.shift();
+                        }
                     }
                 }
             },
@@ -95,12 +103,10 @@ if (document.getElementById("Monitor")) {
 
                 var svgSettings = this.getSvgSettingsByTarget("#Trend_svg"),
                     maximumDataLength = 30,
-                    transitionSettings = this.transitionSettings,
-                    timeBeforeDuration = new Date(Date.now() - transitionSettings.duration);
+                    transitionSettings = this.transitionSettings;
 
                 var xScale = d3.scaleTime()
-                    .range([0, svgSettings.width])
-                    .domain([timeBeforeDuration - (maximumDataLength - 2), timeBeforeDuration - transitionSettings.duration]);
+                    .range([0, svgSettings.width]);
 
                 var xAxis = d3.axisBottom(xScale);
 
@@ -145,7 +151,7 @@ if (document.getElementById("Monitor")) {
                 var lineChart = {};
                 lineChart.update = (data) => {
 
-                    self.updateDictForSpeedTrendSvg(data);
+                    self.updateDictForSpeedTrendSvg(data, maximumDataLength);
 
                     var now = new Date();
                     var colorFactor = 1;
@@ -163,10 +169,6 @@ if (document.getElementById("Monitor")) {
                         device.path
                             .datum(device.readings)
                             .attr('d', line);
-
-                        if (device.readings.length > maximumDataLength) {
-                            device.readings.shift();
-                        }
                     }
 
                     //// Shift domain
